@@ -7,12 +7,18 @@
     <title>{% block title %}Welcome to Django{% endblock %}</title>
 
     <link rel="stylesheet" href="{% static 'styl/style.css' %}">
+
+    {% include 'scripts.html' %}
 </head>
 <body>
-<div id="wrapper" class="content">
+
+{% include 'navigation.html' %}
+
+<div id="wrapper" class="container">
     {% block content %}
         <h1>Welcome to Django</h1>
     {% endblock %}
 </div>
+
 </body>
 </html>
