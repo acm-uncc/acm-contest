@@ -1,6 +1,5 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container">
-
         <a class="navbar-brand" href="{% url 'jam:index' %}">Index</a>
 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -10,10 +9,20 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a href="{% url 'jam:problem-list' %}" class="nav-link">Problems</a>
-                </li>
+                {#                <li class="nav-item">#}
+                {#                    <a href="{% url 'jam:problem-create' %}" class="nav-link">New Problem</a>#}
+                {#                </li>#}
             </ul>
+
+            {% if user.is_authenticated %}
+                {% if user.is_staff %}
+                    <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary">Admin Page</a>
+                {% endif %}
+                <a href="{% url 'jam:logout' %}" class="btn btn-outline-secondary ml-3">Logout {{ user.username }}</a>
+            {% else %}
+                <a href="{% url 'jam:login' %}" class="btn btn-outline-secondary ml-3">Login</a>
+                <a href="{% url 'jam:signup' %}" class="btn btn-outline-secondary ml-3">Sign Up</a>
+            {% endif %}
         </div>
     </div>
 </nav>

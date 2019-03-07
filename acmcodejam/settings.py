@@ -36,7 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'jam.apps.JamConfig',
-    'crispy_forms'
+    # 'crispy_forms',
+    # 'extra_views',
+    'bootstrap4'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -121,3 +123,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+# Login URLS
+
+LOGIN_URL = 'jam:login'
+LOGIN_REDIRECT_URL = 'jam:index'
+LOGOUT_REDIRECT_URL = 'jam:index'
