@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block title %}
+    Submission
+{% endblock %}
+
+{% block content %}
+    <h1>Submission Details</h1>
+    <h2>{{ submission.problem.title }}</h2>
+
+    {% if submission.correct %}
+        Correct
+    {% else %}
+        Incorrect
+    {% endif %}
+
+    <pre><code>{{ submission.submission }}</code></pre>
+{% endblock %}

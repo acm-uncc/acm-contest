@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block title %}
+    Submit
+{% endblock %}
+
+{% block content %}
+    <h1>Submit</h1>
+    <h2>{{ problem.title }}</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-success">Submit</button>
+        {% endbuttons %}
+    </form>
+{% endblock %}

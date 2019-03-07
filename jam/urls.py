@@ -1,10 +1,9 @@
 from django.urls import path
+from django.contrib.auth.views import LoginView, LogoutView
 
 from jam import views
 
 app_name = 'jam'
-
-from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     path('', views.contest.Index.as_view(), name='index'),
@@ -15,5 +14,9 @@ urlpatterns = [
 
     path('p/new', views.ProblemCreate.as_view(), name='problem-create'),
     path('p/<slug>', views.ProblemDetail.as_view(), name='problem'),
+    path('p/<slug>/submit', views.ProblemSubmit.as_view(), name='problem-submit'),
     path('p/<slug>/delete', views.ProblemDelete.as_view(), name='problem-delete'),
+
+    path('submissions', views.SubmissionList.as_view(), name='submissions'),
+    path('submissions/<pk>', views.SubmissionDetail.as_view(), name='submission'),
 ]

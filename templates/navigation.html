@@ -9,9 +9,11 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                {#                <li class="nav-item">#}
-                {#                    <a href="{% url 'jam:problem-create' %}" class="nav-link">New Problem</a>#}
-                {#                </li>#}
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{% url 'jam:submissions' %}" class="nav-link">My Submissions</a>
+                    </li>
+                {% endif %}
             </ul>
 
             {% if user.is_authenticated %}

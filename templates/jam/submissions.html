@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block title %}
+    Submission List
+{% endblock %}
+
+{% block content %}
+    <ul>
+        {% for submission in submission_list %}
+            <li>
+                {{ submission.user.username }}
+                {{ submission.problem.title }}
+                {{ submission.correct }}
+            </li>
+        {% endfor %}
+
+    </ul>
+{% endblock %}

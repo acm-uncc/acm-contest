@@ -8,11 +8,14 @@
     <div class="card mb-4">
         <div class="card-body">
             <h2 class="card-title">{{ problem.title }}</h2>
-            <p class="card-text">{{ problem.description }}</p>
+            <p class="card-text">{{ problem.description }}
+                {% if perms.jam.delete_problem %}
+                    <a href="{% url 'jam:problem-delete' problem.slug %}" class="btn btn-danger float-right">Delete</a>
+                {% endif %}
+            </p>
         </div>
     </div>
 
-    {% if perms.jam.delete_problem %}
-        <a href="{% url 'jam:problem-delete' problem.slug %}" class="btn btn-danger">Delete</a>
-    {% endif %}
+    <a href="{% url 'jam:problem-submit' problem.slug %}" class="btn btn-outline-success">Submit</a>
+
 {% endblock %}
