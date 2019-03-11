@@ -1,8 +1,10 @@
 from django.contrib.auth.models import User
 from django.db.models import Count, Q
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic
+from django.views.generic.detail import SingleObjectMixin
 
 from jam import models
 
@@ -15,17 +17,6 @@ class Index(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(Index, self).get_context_data(**kwargs)
-
-        # top_users = User.objects.annotate(
-        #     num_submissions=Count(
-        #         'submission',
-        #         filter=Q(
-        #             submission__correct=True
-        #         )
-        #     )
-        # ).order_by(
-        #     '-num_submissions'
-        # )[:5]
 
         user_scores = [
             (models.user_success(user), user) for user in User.objects.all()
@@ -54,7 +45,7 @@ class ProblemCreate(authmixins.PermissionRequiredMixin, generic.CreateView):
     model = models.Problem
     template_name = 'jam/problem_create.html'
 
-    fields = 'title', 'slug', 'difficulty', 'description', 'solution'
+    fields = 'title', 'slug', 'description'
 
 
 class ProblemDelete(authmixins.PermissionRequiredMixin, generic.DeleteView):
@@ -70,7 +61,42 @@ class ProblemUpdate(authmixins.PermissionRequiredMixin, generic.UpdateView):
     model = models.Problem
     template_name = 'jam/problem_update.html'
 
-    fields = 'title', 'difficulty', 'description', 'solution'
+    fields = 'title', 'description'
+
+
+class PartCreate(authmixins.PermissionRequiredMixin, generic.CreateView):
+    permission_required = 'jam.create_part'
+
+    model = models.Part
+    template_name = 'jam/part_create.html'
+
+    fields = 'title', 'slug', 'input', 'solution'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PartCreate, self).get_context_data(**kwargs)
+        ctx['problem'] = models.Problem.objects.get(slug=self.kwargs['slug'])
+        return ctx
+
+    def form_valid(self, form):
+        form.instance.problem = models.Problem.objects.get(slug=self.kwargs['slug'])
+        return super(PartCreate, self).form_valid(form)
+
+
+class PartDelete(authmixins.PermissionRequiredMixin, generic.DeleteView):
+    permission_required = 'jam.delete_part'
+
+    model = models.Part
+
+    def get_success_url(self):
+        return reverse_lazy('jam:problem', kwargs=dict(slug=self.kwargs['problem']))
+
+
+class PartDownload(SingleObjectMixin, generic.View):
+    model = models.Part
+
+    def get(self, request, *args, **kwargs):
+        part = self.get_object()
+        return HttpResponse(part.input, content_type='text/plain; charset=utf8')
 
 
 class ProblemSubmit(authmixins.LoginRequiredMixin, generic.FormView):
@@ -78,25 +104,17 @@ class ProblemSubmit(authmixins.LoginRequiredMixin, generic.FormView):
 
     form_class = forms.modelform_factory(models.Submission, fields=('submission',))
 
-    def get_success_url(self):
-        return reverse_lazy('jam:problem', kwargs=dict(slug=self.kwargs['slug']))
-
     def get_context_data(self, **kwargs):
         ctx = super(ProblemSubmit, self).get_context_data(**kwargs)
         ctx['problem'] = models.Problem.objects.get(slug=self.kwargs['slug'])
         return ctx
 
     def form_valid(self, form):
-        problem = models.Problem.objects.get(slug=self.kwargs['slug'])
+        form.instance.problem = models.Problem.objects.get(slug=self.kwargs['slug'])
+        form.instance.user = self.request.user,
+        form.instance.submission = form.cleaned_data['submission']
 
-        sub = models.Submission.objects.create(
-            problem=problem,
-            user=self.request.user,
-            submission=form.cleaned_data['submission'],
-        )
-        sub.save()
-
-        return redirect(sub.get_absolute_url())
+        return super(ProblemSubmit, self).form_valid(form)
 
 
 class SubmissionDetail(generic.DetailView):

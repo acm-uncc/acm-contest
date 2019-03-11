@@ -3,11 +3,11 @@
 {% load bootstrap4 %}
 
 {% block title %}
-    New Problem
+    New Part
 {% endblock %}
 
 {% block content %}
-    <h1>Create Problem</h1>
+    <h1>Create Part</h1>
 
     <form action="#" method="post">
         {% csrf_token %}
@@ -21,11 +21,10 @@
             </div>
         </div>
 
-        {% bootstrap_field form.description %}
+        {% bootstrap_field form.input %}
+        {% bootstrap_field form.solution %}
 
-        {% buttons %}
-            <button type="submit" class="btn btn-success">Submit</button>
-            <a href="{% url 'jam:index' %}" class="btn btn-danger">Cancel</a>
-        {% endbuttons %}
+        <button type="submit" class="btn btn-success">Submit</button>
+        <a href="{% url 'jam:problem' problem.slug %}" class="btn btn-danger">Cancel</a>
     </form>
 {% endblock %}

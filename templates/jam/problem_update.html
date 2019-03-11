@@ -16,18 +16,13 @@
             <div class="col">
                 {% bootstrap_field form.title %}
             </div>
-            <div class="col-2">
-                {% bootstrap_field form.difficulty %}
-            </div>
         </div>
 
         {% bootstrap_field form.description %}
-        {% bootstrap_field form.solution %}
 
         {% buttons %}
             <button type="submit" class="btn btn-success">Update</button>
             <a href="{% url 'jam:problem' problem.slug %}" class="btn btn-danger">Cancel</a>
         {% endbuttons %}
     </form>
-
 {% endblock %}

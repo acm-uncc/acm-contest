@@ -7,28 +7,47 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="card-title">{{ problem.title }}</h1>
-                    <div class="card-text">
-                        {{ problem.description |markdown_filter |safe }}
-                    </div>
-                </div>
-                <div class="card-header">
-                    <a href="{% url 'jam:problem-submit' problem.slug %}" class="btn btn-outline-success">Submit</a>
-
-                    <span class="float-right">
-                        {% if perms.jam.update_problem %}
-                            <a href="{% url 'jam:problem-update' problem.slug %}" class="btn btn-secondary">Edit</a>
-                        {% endif %}
-                        {% if perms.jam.delete_problem %}
-                            <a href="{% url 'jam:problem-delete' problem.slug %}" class="btn btn-danger">Delete</a>
-                        {% endif %}
-                    </span>
-                </div>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h1 class="card-title">{{ problem.title }}</h1>
+            <div class="card-text">
+                {{ problem.description |markdown_filter |safe }}
             </div>
         </div>
+        <div class="card-footer">
+            <span class="float-right">
+                {% if perms.jam.update_problem and perms.jam.create_part %}
+                    <a href="{% url 'jam:part-create' problem.slug %}" class="btn btn-secondary">New Part</a>
+                {% endif %}
+                {% if perms.jam.update_problem %}
+                    <a href="{% url 'jam:problem-update' problem.slug %}" class="btn btn-secondary">Edit</a>
+                {% endif %}
+                {% if perms.jam.delete_problem %}
+                    <a href="{% url 'jam:problem-delete' problem.slug %}" class="btn btn-danger">Delete</a>
+                {% endif %}
+            </span>
+        </div>
     </div>
+
+    {% for part in problem.part_set.all %}
+        <div class="card mb-3">
+            <div class="card-body">
+                {{ part.title }}
+
+                <span class="float-right">
+                    {% if part.input %}
+                        <a href="{% url 'jam:part-download' problem.slug part.pk %}"
+                           class="btn btn-primary">{{ part.title }} Input</a>
+                    {% else %}
+                        <a href="#" class="btn btn-primary disabled">No Input</a>
+                    {% endif %}
+                    <a href="#" class="btn btn-success">Submit</a>
+                    {% if perms.jam.delete_problem %}
+                        <a href="{% url 'jam:part-delete' problem.slug part.pk %}" class="btn btn-danger">Delete</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    {% endfor %}
+
 {% endblock %}
