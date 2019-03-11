@@ -36,12 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'jam.apps.JamConfig',
-    # 'crispy_forms',
-    # 'extra_views',
-    'bootstrap4'
+    'bootstrap4',
+    'markdown_filter'
 ]
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -129,3 +126,8 @@ STATICFILES_DIRS = [
 LOGIN_URL = 'jam:login'
 LOGIN_REDIRECT_URL = 'jam:index'
 LOGOUT_REDIRECT_URL = 'jam:index'
+
+# Markdown Tags
+MARKDOWN_FILTER_WHITELIST_TAGS = [
+    'a', 'p', 'code', 'pre', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'img'
+]

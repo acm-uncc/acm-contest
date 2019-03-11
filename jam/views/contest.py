@@ -56,17 +56,21 @@ class ProblemCreate(authmixins.PermissionRequiredMixin, generic.CreateView):
 
     fields = 'title', 'slug', 'difficulty', 'description', 'solution'
 
-    def get_form(self, form_class=None):
-        form = super(ProblemCreate, self).get_form(form_class)
-
-        return form
-
 
 class ProblemDelete(authmixins.PermissionRequiredMixin, generic.DeleteView):
     permission_required = 'jam.delete_problem'
 
     model = models.Problem
     success_url = reverse_lazy('jam:index')
+
+
+class ProblemUpdate(authmixins.PermissionRequiredMixin, generic.UpdateView):
+    permission_required = 'jam.update_problem'
+
+    model = models.Problem
+    template_name = 'jam/problem_update.html'
+
+    fields = 'title', 'difficulty', 'description', 'solution'
 
 
 class ProblemSubmit(authmixins.LoginRequiredMixin, generic.FormView):
