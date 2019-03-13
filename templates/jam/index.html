@@ -1,22 +1,24 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Index
+    Problm Index
 {% endblock %}
 
 {% block content %}
-    <h1>Index</h1>
-
-    <h3>Problems</h3>
+    <h1>Problem Index</h1>
 
     <div class="list-group mb-2">
-        {% for problem in problems %}
-            <a href="{{ problem.get_absolute_url }}"
-               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        {% for problem in problem_list %}
+            <a href="{{ problem.get_absolute_url }}" class="list-group-item">
                 {{ problem.title }}
 
-                <span class="badge badge-secondary">
-                    {{ problem.difficulty }} difficulty
+                <span class="float-right">
+                    {% for part in problem.part_set.all %}
+                        <span class="badge badge-primary">
+                            {{ part.title }}: {{ part.points }}
+                        </span>
+                    {% endfor %}
+
                 </span>
             </a>
         {% endfor %}
@@ -25,21 +27,4 @@
     {% if perms.jam.add_problem %}
         <a href="{% url 'jam:problem-create' %}" class="btn btn-outline-success mb-4">Add Problem</a>
     {% endif %}
-
-    <h3>Users</h3>
-
-    <ul class="list-group mb-2">
-        {% for succeeded, u in top_users %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{ u.username }}
-                <span>
-                    {% for prob in succeeded %}
-                        <span class="badge badge-success">
-                            {{ prob.title }}
-                        </span>
-                    {% endfor %}
-                </span>
-            </li>
-        {% endfor %}
-    </ul>
 {% endblock %}

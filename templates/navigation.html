@@ -9,6 +9,10 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a href="{% url 'jam:scoreboard' %}" class="nav-link">Scoreboard</a>
+                </li>
+
                 {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a href="{% url 'jam:submissions' %}" class="nav-link">My Submissions</a>
@@ -20,10 +24,12 @@
                 {% if user.is_staff %}
                     <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary">Admin Page</a>
                 {% endif %}
-                <a href="{% url 'jam:logout' %}" class="btn btn-outline-secondary ml-3">Logout {{ user.username }}</a>
+                <a href="{% url 'jam:logout' %}?next={{ request.path }}"
+                   class="btn btn-outline-secondary ml-3">Logout {{ user.username }}</a>
             {% else %}
-                <a href="{% url 'jam:login' %}" class="btn btn-outline-secondary ml-3">Login</a>
-                <a href="{% url 'jam:signup' %}" class="btn btn-outline-secondary ml-3">Sign Up</a>
+                <a href="{% url 'jam:login' %}?next={{ request.path }}" class="btn btn-outline-secondary ml-3">Login</a>
+                <a href="{% url 'jam:signup' %}?next={{ request.path }}" class="btn btn-outline-secondary ml-3">Sign
+                    Up</a>
             {% endif %}
         </div>
     </div>

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Problm Index
+{% endblock %}
+
+{% block head %}
+    {# Automatically refresh every few seconds #}
+    <meta http-equiv="refresh" content="30">
+{% endblock %}
+
+{% block content %}
+    <h1>Scoreboard</h1>
+
+    {% if user_list %}
+        <ul class="list-group mb-2">
+            {% for u in user_list %}
+                <li class="list-group-item">
+                    {{ u.username }}
+
+                    <span class="float-right">
+                    <span class="badge badge-primary">
+                        {{ u.score.points }}
+                    </span>
+                </span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        No correct responses yet...
+    {% endif %}
+{% endblock %}

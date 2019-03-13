@@ -8,7 +8,7 @@
 
 {% block content %}
     <h1>Submit</h1>
-    <h2>{{ problem.title }}</h2>
+    <h2>{{ problem.title }} {{ part.title }}</h2>
 
     <form method="post">
         {% csrf_token %}

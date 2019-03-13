@@ -3,11 +3,11 @@
 {% load bootstrap4 %}
 
 {% block title %}
-    New Part
+    Update Part
 {% endblock %}
 
 {% block content %}
-    <h1>Create Part</h1>
+    <h1>Update Part {{ part.title }} of Problem {{ problem.title }}</h1>
 
     <form action="#" method="post">
         {% csrf_token %}

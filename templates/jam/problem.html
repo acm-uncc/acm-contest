@@ -38,23 +38,31 @@
                 <div class="card mb-2">
                     <div class="card-body">
                         <h3 class="float-left">{{ part.title }}</h3>
-                        <span class="float-right">
+                        <div class="float-right">
                             {% if part.input %}
                                 <a href="{% url 'jam:part-download' problem.slug part.pk %}" class="btn btn-primary">
                                     Input
                                 </a>
                             {% endif %}
 
-                            <a href="#" class="btn btn-success">
+                            <a href="{% url 'jam:part-submit' problem.slug part.pk %}" class="btn btn-success">
                                 Submit
                             </a>
+                            {% if perms.jam.delete_part or perms.jam.update_part %}
+                                {% if perms.jam.update_part %}
+                                    <a href="{% url 'jam:part-update' problem.slug part.pk %}"
+                                       class="btn btn-secondary">
+                                        Edit
+                                    </a>
+                                {% endif %}
 
-                            {% if perms.jam.delete_part %}
-                                <a href="{% url 'jam:part-delete' problem.slug part.pk %}" class="btn btn-danger">
-                                    Delete
-                                </a>
+                                {% if perms.jam.delete_part %}
+                                    <a href="{% url 'jam:part-delete' problem.slug part.pk %}" class="btn btn-danger">
+                                        Delete
+                                    </a>
+                                {% endif %}
                             {% endif %}
-                        </span>
+                        </div>
                     </div>
                 </div>
             {% endfor %}

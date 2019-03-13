@@ -12,26 +12,26 @@ from django import forms
 from django.contrib.auth import mixins as authmixins
 
 
-class Index(generic.TemplateView):
+class Index(generic.ListView):
     template_name = 'jam/index.html'
+    model = models.Problem
 
-    def get_context_data(self, **kwargs):
-        ctx = super(Index, self).get_context_data(**kwargs)
+    # def get_context_data(self, **kwargs):
+    #     ctx = super(Index, self).get_context_data(**kwargs)
+    #
+    #     ctx.update(
+    #         problems=models.Problem.objects.all(),
+    #         users=User.objects.filter(score__points__gt=0).order_by('-score__points'),
+    #     )
+    #     return ctx
 
-        user_scores = [
-            (models.user_success(user), user) for user in User.objects.all()
-        ]
 
-        top_users = sorted([
-            (success, user) for success, user in user_scores
-            if success
-        ], key=lambda x: x[0], reverse=True)
+class ScoreBoard(generic.ListView):
+    template_name = 'jam/scoreboard.html'
+    model = User
 
-        ctx.update(
-            problems=models.Problem.objects.all(),
-            top_users=top_users,
-        )
-        return ctx
+    def get_queryset(self):
+        return User.objects.filter(score__points__gt=0).order_by('-score__points')
 
 
 class ProblemDetail(generic.DetailView):
@@ -70,7 +70,7 @@ class PartCreate(authmixins.PermissionRequiredMixin, generic.CreateView):
     model = models.Part
     template_name = 'jam/part_create.html'
 
-    fields = 'title', 'slug', 'input', 'solution'
+    fields = 'title', 'points', 'input', 'solution'
 
     def get_context_data(self, **kwargs):
         ctx = super(PartCreate, self).get_context_data(**kwargs)
@@ -91,6 +91,24 @@ class PartDelete(authmixins.PermissionRequiredMixin, generic.DeleteView):
         return reverse_lazy('jam:problem', kwargs=dict(slug=self.kwargs['problem']))
 
 
+class PartUpdate(authmixins.PermissionRequiredMixin, generic.UpdateView):
+    permission_required = 'jam.update_part'
+
+    model = models.Part
+    template_name = 'jam/part_update.html'
+
+    fields = 'title', 'points', 'input', 'solution'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PartUpdate, self).get_context_data(**kwargs)
+        ctx['problem'] = models.Problem.objects.get(slug=self.kwargs['slug'])
+        return ctx
+
+    def form_valid(self, form):
+        form.instance.problem = models.Problem.objects.get(slug=self.kwargs['slug'])
+        return super(PartUpdate, self).form_valid(form)
+
+
 class PartDownload(SingleObjectMixin, generic.View):
     model = models.Part
 
@@ -99,22 +117,30 @@ class PartDownload(SingleObjectMixin, generic.View):
         return HttpResponse(part.input, content_type='text/plain; charset=utf8')
 
 
-class ProblemSubmit(authmixins.LoginRequiredMixin, generic.FormView):
-    template_name = 'jam/problem_submit.html'
+class PartSubmit(authmixins.LoginRequiredMixin, generic.FormView):
+    template_name = 'jam/part_submit.html'
 
     form_class = forms.modelform_factory(models.Submission, fields=('submission',))
 
     def get_context_data(self, **kwargs):
-        ctx = super(ProblemSubmit, self).get_context_data(**kwargs)
-        ctx['problem'] = models.Problem.objects.get(slug=self.kwargs['slug'])
+        ctx = super(PartSubmit, self).get_context_data(**kwargs)
+        ctx['problem'] = models.Problem.objects.get(slug=self.kwargs['problem'])
+        ctx['part'] = models.Part.objects.get(pk=self.kwargs['pk'])
         return ctx
 
     def form_valid(self, form):
-        form.instance.problem = models.Problem.objects.get(slug=self.kwargs['slug'])
-        form.instance.user = self.request.user,
+        form.instance.part = models.Part.objects.get(pk=self.kwargs['pk'])
+        form.instance.user = User.objects.get(id=self.request.user.id)
         form.instance.submission = form.cleaned_data['submission']
 
-        return super(ProblemSubmit, self).form_valid(form)
+        form.instance.save()
+
+        self.submission = form.instance
+
+        return super(PartSubmit, self).form_valid(form)
+
+    def get_success_url(self):
+        return self.submission.get_absolute_url()
 
 
 class SubmissionDetail(generic.DetailView):
