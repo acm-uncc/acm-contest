@@ -70,7 +70,7 @@ class PartCreate(authmixins.PermissionRequiredMixin, generic.CreateView):
     model = models.Part
     template_name = 'jam/part_create.html'
 
-    fields = 'title', 'points', 'input', 'solution'
+    fields = 'title', 'slug', 'points', 'input', 'solution'
 
     def get_context_data(self, **kwargs):
         ctx = super(PartCreate, self).get_context_data(**kwargs)
@@ -97,15 +97,15 @@ class PartUpdate(authmixins.PermissionRequiredMixin, generic.UpdateView):
     model = models.Part
     template_name = 'jam/part_update.html'
 
-    fields = 'title', 'points', 'input', 'solution'
+    fields = 'title', 'slug', 'points', 'input', 'solution'
 
     def get_context_data(self, **kwargs):
         ctx = super(PartUpdate, self).get_context_data(**kwargs)
-        ctx['problem'] = models.Problem.objects.get(slug=self.kwargs['slug'])
+        ctx['problem'] = models.Problem.objects.get(slug=self.kwargs['problem'])
         return ctx
 
     def form_valid(self, form):
-        form.instance.problem = models.Problem.objects.get(slug=self.kwargs['slug'])
+        form.instance.problem = models.Problem.objects.get(slug=self.kwargs['problem'])
         return super(PartUpdate, self).form_valid(form)
 
 

@@ -19,9 +19,10 @@ urlpatterns = [
 
     path('p/<slug>/new', views.PartCreate.as_view(), name='part-create'),
     path('p/<slug:problem>/p/<pk>/delete', views.PartDelete.as_view(), name='part-delete'),
-    path('p/<slug:problem>/p/<pk>/update', views.PartDelete.as_view(), name='part-update'),
+    path('p/<slug:problem>/p/<pk>/update', views.PartUpdate.as_view(), name='part-update'),
     path('p/<slug:problem>/p/<pk>/submit', views.PartSubmit.as_view(), name='part-submit'),
-    path('p/<slug:problem>/p/<pk>', views.PartDownload.as_view(), name='part-download'),
+
+    path('input/<pk>/<slug:problem>-<slug:part>', views.PartDownload.as_view(), name='part-download'),
 
     path('scoreboard', views.ScoreBoard.as_view(), name='scoreboard'),
 

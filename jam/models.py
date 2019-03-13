@@ -24,6 +24,7 @@ class Part(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
 
     title = models.CharField(max_length=255)
+    slug = models.SlugField()
     points = models.IntegerField()
 
     input = models.TextField(max_length=10_000, blank=True)
