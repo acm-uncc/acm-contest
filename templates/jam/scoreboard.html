@@ -10,23 +10,42 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Scoreboard</h1>
+    <h1 class="text-center">Scoreboard</h1>
 
-    {% if user_list %}
-        <ul class="list-group mb-2">
-            {% for u in user_list %}
-                <li class="list-group-item">
-                    {{ u.username }}
+    <table class="table">
+        <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">User</th>
+            <th scope="col">Score</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for u in user_list %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ u.username }}</td>
+                <td>{{ u.score.points }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
-                    <span class="float-right">
-                    <span class="badge badge-primary">
-                        {{ u.score.points }}
-                    </span>
-                </span>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        No correct responses yet...
-    {% endif %}
+    {#    {% if user_list %}#}
+    {#        <ul class="list-group mb-2">#}
+    {#            {% for u in user_list %}#}
+    {#                <li class="list-group-item">#}
+    {#                    {{ u.username }}#}
+    {##}
+    {#                    <span class="float-right">#}
+    {#                    <span class="badge badge-primary">#}
+    {#                        {{ u.score.points }}#}
+    {#                    </span>#}
+    {#                </span>#}
+    {#                </li>#}
+    {#            {% endfor %}#}
+    {#        </ul>#}
+    {#    {% else %}#}
+    {#        No correct responses yet...#}
+    {#    {% endif %}#}
 {% endblock %}

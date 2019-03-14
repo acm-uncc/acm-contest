@@ -21,6 +21,7 @@ urlpatterns = [
     path('p/<slug:problem>/p/<pk>/delete', views.PartDelete.as_view(), name='part-delete'),
     path('p/<slug:problem>/p/<pk>/update', views.PartUpdate.as_view(), name='part-update'),
     path('p/<slug:problem>/p/<pk>/submit', views.PartSubmit.as_view(), name='part-submit'),
+    path('p/<slug:problem>/p/<pk>/upload', views.PartSubmitUpload.as_view(), name='part-submit-upload'),
 
     path('input/<pk>/<slug:problem>-<slug:part>', views.PartDownload.as_view(), name='part-download'),
 

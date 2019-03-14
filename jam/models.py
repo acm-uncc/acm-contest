@@ -27,8 +27,8 @@ class Part(models.Model):
     slug = models.SlugField()
     points = models.IntegerField()
 
-    input = models.TextField(max_length=10_000, blank=True)
-    solution = models.TextField(max_length=10_000, blank=True)
+    input = models.TextField(blank=True)
+    solution = models.TextField(blank=True)
 
     def get_absolute_url(self):
         return self.problem.get_absolute_url()
@@ -43,7 +43,7 @@ class Submission(models.Model):
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 
-    submission = models.TextField(max_length=10_000)
+    submission = models.TextField()
     correct = models.BooleanField(default=False)
 
     def get_absolute_url(self):

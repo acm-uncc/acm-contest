@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db.models import Count, Q
+from django.forms import FileInput
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -141,6 +142,35 @@ class PartSubmit(authmixins.LoginRequiredMixin, generic.FormView):
 
     def get_success_url(self):
         return self.submission.get_absolute_url()
+
+
+class PartSubmitUpload(PartSubmit):
+    template_name = 'jam/part_submit_upload.html'
+
+    class form_class(forms.Form):
+        submission = forms.FileField()
+
+    def get_form(self, form_class=None):
+        cls = form_class or self.get_form_class()
+        return cls(self.request.POST, self.request.FILES)
+
+    def form_invalid(self, form):
+        print('oh no')
+        return super(PartSubmitUpload, self).form_invalid(form)
+
+    def form_valid(self, form):
+        f = form.files['submission']
+        form.instance = models.Submission.objects.create(
+            part=models.Part.objects.get(pk=self.kwargs['pk']),
+            user=User.objects.get(id=self.request.user.id),
+            submission=f.read().decode('utf-8')
+        )
+
+        form.instance.save()
+
+        self.submission = form.instance
+
+        return generic.FormView.form_valid(self, form)
 
 
 class SubmissionDetail(generic.DetailView):

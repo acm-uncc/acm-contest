@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Problem Index</h1>
+    <h1 class="text-center">Problem Index</h1>
 
     <div class="list-group mb-2">
         {% for problem in problem_list %}
@@ -13,7 +13,7 @@
                 {{ problem.title }}
 
                 <span class="float-right">
-                    {% for part in problem.part_set.all %}
+                    {% for part in problem.part_set.all|dictsort:"points" %}
                         <span class="badge badge-primary">
                             {{ part.title }}: {{ part.points }}
                         </span>
