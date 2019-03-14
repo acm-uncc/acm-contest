@@ -9,7 +9,7 @@
 {% block content %}
     <h1>Create Part</h1>
 
-    <form action="#" method="post">
+    <form method="post" class="mb-2">
         {% csrf_token %}
 
         <div class="form-row">
@@ -30,4 +30,6 @@
         <button type="submit" class="btn btn-success">Submit</button>
         <a href="{% url 'jam:problem' problem.slug %}" class="btn btn-danger">Cancel</a>
     </form>
+
+    <a href="{% url 'jam:part-create-upload' problem.slug %}" class="btn btn-secondary">Upload Files</a>
 {% endblock %}

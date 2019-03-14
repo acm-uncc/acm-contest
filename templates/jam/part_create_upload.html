@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block title %}
+    New Part
+{% endblock %}
+
+{% block content %}
+    <h1>Create Part</h1>
+
+    <form method="post" class="mb-2" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-row">
+            <div class="col">
+                {% bootstrap_field form.title %}
+            </div>
+            <div class="col-3">
+                {% bootstrap_field form.slug %}
+            </div>
+            <div class="col-3">
+                {% bootstrap_field form.points %}
+            </div>
+        </div>
+
+        <div class="custom-file mb-2">
+            <input type="file" class="custom-file-input" name="{{ form.input.name }}" id="{{ form.input.auto_id }}"
+                   required>
+            <label for="{{ form.input.auto_id }}" class="custom-file-label">{{ form.input.label }}</label>
+        </div>
+
+        <div class="custom-file mb-2">
+            <input type="file" class="custom-file-input" name="{{ form.solution.name }}"
+                   id="{{ form.solution.auto_id }}" required>
+            <label for="{{ form.solution.auto_id }}" class="custom-file-label">{{ form.solution.label }}</label>
+        </div>
+
+        <button type="submit" class="btn btn-success">Submit</button>
+        <a href="{% url 'jam:problem' problem.slug %}" class="btn btn-danger">Cancel</a>
+
+        <script type="application/javascript">
+            $('#{{ form.input.auto_id }}').change(function (e) {
+                let name = e.target.files[0].name;
+                $('.custom-file-label[for={{ form.input.auto_id }}]').html(name);
+            });
+
+            $('#{{ form.solution.auto_id }}').change(function (e) {
+                let name = e.target.files[0].name;
+                $('.custom-file-label[for={{ form.solution.auto_id }}]').html(name);
+            });
+        </script>
+    </form>
+
+    <a href="{% url 'jam:part-create' problem.slug %}" class="btn btn-secondary">Paste Text</a>
+{% endblock %}

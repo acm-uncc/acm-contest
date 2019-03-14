@@ -83,6 +83,35 @@ class PartCreate(authmixins.PermissionRequiredMixin, generic.CreateView):
         return super(PartCreate, self).form_valid(form)
 
 
+class PartCreateUpload(authmixins.PermissionRequiredMixin, generic.CreateView):
+    permission_required = 'jam.create_part'
+
+    model = models.Part
+    template_name = 'jam/part_create_upload.html'
+
+    form_class = forms.modelform_factory(
+        models.Part,
+        fields=('title', 'slug', 'points', 'input', 'solution'),
+        field_classes=(forms.CharField, forms.SlugField, forms.IntegerField, forms.FileField, forms.FileField)
+    )
+
+    def get_form(self, form_class=None):
+        cls = form_class or self.get_form_class()
+        return cls(self.request.POST, self.request.FILES)
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PartCreateUpload, self).get_context_data(**kwargs)
+        ctx['problem'] = models.Problem.objects.get(slug=self.kwargs['slug'])
+        return ctx
+
+    def form_valid(self, form):
+        form.instance.problem = models.Problem.objects.get(slug=self.kwargs['slug'])
+        form.instance.input = form.files['input'].read().decode('utf-8')
+        form.instance.solution = form.files['solution'].read().decode('utf-8')
+
+        return super(PartCreateUpload, self).form_valid(form)
+
+
 class PartDelete(authmixins.PermissionRequiredMixin, generic.DeleteView):
     permission_required = 'jam.delete_part'
 
@@ -153,10 +182,6 @@ class PartSubmitUpload(PartSubmit):
     def get_form(self, form_class=None):
         cls = form_class or self.get_form_class()
         return cls(self.request.POST, self.request.FILES)
-
-    def form_invalid(self, form):
-        print('oh no')
-        return super(PartSubmitUpload, self).form_invalid(form)
 
     def form_valid(self, form):
         f = form.files['submission']
