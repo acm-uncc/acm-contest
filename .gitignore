@@ -3,4 +3,3 @@ venv/
 
 .py[cod]
 db.sqlite3
-**/styl/*.css

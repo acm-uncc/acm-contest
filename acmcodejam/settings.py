@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -134,3 +135,5 @@ MARKDOWN_FILTER_WHITELIST_TAGS = [
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
     'ul', 'ol', 'li'
 ]
+
+django_heroku.settings(locals())

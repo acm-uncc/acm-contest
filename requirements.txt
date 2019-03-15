@@ -1,0 +1,5 @@
+django
+django-bootstrap4
+django-markdown-filter
+django-heroku
+gunicorn
