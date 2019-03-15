@@ -33,6 +33,9 @@ class Part(models.Model):
     def get_absolute_url(self):
         return self.problem.get_absolute_url()
 
+    def __str__(self):
+        return f'{self.problem} : {self.title} ({self.slug})'
+
 
 class Score(models.Model):
     user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
@@ -43,6 +46,9 @@ class Score(models.Model):
         parts = {sub.part for sub in subs}
         self.points = sum(part.points for part in parts)
         self.save()
+
+    def __str__(self):
+        return f'{self.user.name} score ({self.points} pts)'
 
 
 class Submission(models.Model):
@@ -61,3 +67,6 @@ class Submission(models.Model):
 
         score, created = Score.objects.get_or_create(user=self.user)
         score.recompute()
+
+    def __str__(self):
+        return f'{self.user.username} - {self.part} ({"correct" if self.correct else "incorrect"})'
