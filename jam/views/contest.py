@@ -17,21 +17,14 @@ class Index(generic.ListView):
     template_name = 'jam/index.html'
     model = models.Problem
 
-    # def get_context_data(self, **kwargs):
-    #     ctx = super(Index, self).get_context_data(**kwargs)
-    #
-    #     ctx.update(
-    #         problems=models.Problem.objects.all(),
-    #         users=User.objects.filter(score__points__gt=0).order_by('-score__points'),
-    #     )
-    #     return ctx
-
 
 class ScoreBoard(generic.ListView):
     template_name = 'jam/scoreboard.html'
     model = User
 
     def get_queryset(self):
+        for score in models.Score.objects.all():
+            score.recompute()
         return User.objects.filter(score__points__gt=0).order_by('-score__points')
 
 

@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'jam.apps.JamConfig',
     'bootstrap4',
-    'markdown_filter'
+    'markdown_filter',
 ]
 
 MIDDLEWARE = [
@@ -132,4 +132,5 @@ MARKDOWN_FILTER_WHITELIST_TAGS = [
     'p', 'img',
     'code', 'pre', 'a', 'em', 'strong',
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'ul', 'ol', 'li'
 ]

@@ -9,7 +9,7 @@
 
     <div class="list-group mb-2">
         {% for problem in problem_list %}
-            <a href="{{ problem.get_absolute_url }}" class="list-group-item">
+            <a href="{{ problem.get_absolute_url }}" class="list-group-item list-group-item-action">
                 {{ problem.title }}
 
                 <span class="float-right">

@@ -7,14 +7,26 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Submission Details</h1>
-    <h2>{{ submission.problem.title }}</h2>
+    <h1 class="text-center">Submission Details</h1>
 
-    {% if submission.correct %}
-        Correct
-    {% else %}
-        Incorrect
-    {% endif %}
+    <h1>
+        {{ submission.part.problem.title }}: {{ submission.part.title }}
+        {% if submission.correct %}
+            <span class="float-right badge badge-success">
+                <i class="fa fa-check fa-fw" aria-hidden="true"></i> Correct
+            </span>
+        {% else %}
+            <span class="float-right badge badge-danger">
+                <i class="fa fa-times fa-fw" aria-hidden="true"></i> Incorrect
+            </span>
+        {% endif %}
+    </h1>
+
+    <hr>
 
     <pre><code>{{ submission.submission }}</code></pre>
+
+    <hr>
+
+    <a href="{% url 'jam:submissions' %}" class="btn btn-outline-secondary">Other Submissions</a>
 {% endblock %}

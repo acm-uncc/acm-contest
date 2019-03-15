@@ -13,7 +13,7 @@
     <h1 class="text-center">Scoreboard</h1>
 
     <table class="table">
-        <thead class="thead-light">
+        <thead class="thead-dark">
         <tr>
             <th scope="col">#</th>
             <th scope="col">User</th>
@@ -30,22 +30,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    {#    {% if user_list %}#}
-    {#        <ul class="list-group mb-2">#}
-    {#            {% for u in user_list %}#}
-    {#                <li class="list-group-item">#}
-    {#                    {{ u.username }}#}
-    {##}
-    {#                    <span class="float-right">#}
-    {#                    <span class="badge badge-primary">#}
-    {#                        {{ u.score.points }}#}
-    {#                    </span>#}
-    {#                </span>#}
-    {#                </li>#}
-    {#            {% endfor %}#}
-    {#        </ul>#}
-    {#    {% else %}#}
-    {#        No correct responses yet...#}
-    {#    {% endif %}#}
 {% endblock %}

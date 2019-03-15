@@ -11,7 +11,7 @@ class Problem(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
 
-    description = models.TextField(max_length=10_000)
+    description = models.TextField()
 
     def get_absolute_url(self):
         return reverse('jam:problem', kwargs=dict(slug=self.slug))
@@ -38,6 +38,12 @@ class Score(models.Model):
     user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     points = models.IntegerField(default=0)
 
+    def recompute(self):
+        subs = Submission.objects.filter(user=self.user, correct=True)
+        parts = {sub.part for sub in subs}
+        self.points = sum(part.points for part in parts)
+        self.save()
+
 
 class Submission(models.Model):
     part = models.ForeignKey(Part, on_delete=models.CASCADE)
@@ -54,7 +60,4 @@ class Submission(models.Model):
         super(Submission, self).save(*a, **kw)
 
         score, created = Score.objects.get_or_create(user=self.user)
-        subs = Submission.objects.filter(user=self.user)
-        parts = {sub.part for sub in subs}
-        score.points = sum(part.points for part in parts)
-        score.save()
+        score.recompute()
