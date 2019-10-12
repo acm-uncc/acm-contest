@@ -28,9 +28,9 @@
         {% bootstrap_field form.solution %}
 
         <button type="submit" class="btn btn-success">Submit</button>
-        <a href="{% url 'jam:problem' problem.slug %}" class="btn btn-danger">Cancel</a>
+        <a href="{% url 'contest:problem' problem.slug %}" class="btn btn-danger">Cancel</a>
     </form>
 
-    <a href="{% url 'jam:part-create-upload' problem.slug %}" class="btn btn-secondary">Upload
+    <a href="{% url 'contest:part-create-upload' problem.slug %}" class="btn btn-secondary">Upload
         Files</a>
 {% endblock %}

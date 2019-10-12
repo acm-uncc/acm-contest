@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('jam', '0005_auto_20190314_1309'),
+        ('contest', '0005_auto_20190314_1309'),
     ]
 
     operations = [

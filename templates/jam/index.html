@@ -49,7 +49,7 @@ btn-lg">Niner Engage</a>
     </div>
 
     {% if perms.jam.add_problem %}
-        <a href="{% url 'jam:problem-create' %}" class="btn btn-outline-success mb-4">Add
+        <a href="{% url 'contest:problem-create' %}" class="btn btn-outline-success mb-4">Add
             Problem</a>
     {% endif %}
 {% endblock %}

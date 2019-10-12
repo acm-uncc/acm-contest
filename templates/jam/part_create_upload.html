@@ -40,7 +40,7 @@
         </div>
 
         <button type="submit" class="btn btn-success">Submit</button>
-        <a href="{% url 'jam:problem' problem.slug %}" class="btn btn-danger">Cancel</a>
+        <a href="{% url 'contest:problem' problem.slug %}" class="btn btn-danger">Cancel</a>
 
         <script type="application/javascript">
             $('#{{ form.input.auto_id }}').change(function (e) {
@@ -55,6 +55,6 @@
         </script>
     </form>
 
-    <a href="{% url 'jam:part-create' problem.slug %}" class="btn btn-secondary">Paste
+    <a href="{% url 'contest:part-create' problem.slug %}" class="btn btn-secondary">Paste
         Text</a>
 {% endblock %}

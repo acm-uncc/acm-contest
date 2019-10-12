@@ -28,13 +28,13 @@
 
     <hr>
 
-    <a href="{% url 'jam:submissions' %}" class="btn btn-outline-secondary">Other
+    <a href="{% url 'contest:submissions' %}" class="btn btn-outline-secondary">Other
         Submissions</a>
 
     <a href="{{ submission.part.problem.get_absolute_url }}"
        class="btn btn-outline-secondary">Back
         to {{ submission.part.problem.title }}</a>
 
-    <a href="{% url 'jam:part-submit' submission.part.problem.slug submission.part.pk %}"
+    <a href="{% url 'contest:part-submit' submission.part.problem.slug submission.part.pk %}"
        class="btn btn-outline-success">Submit Again</a>
 {% endblock %}

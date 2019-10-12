@@ -1,9 +1,9 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 
-from jam import views
+from contest import views
 
-app_name = 'jam'
+app_name = 'contest'
 
 urlpatterns = [
     path('', views.contest.Index.as_view(), name='index'),

@@ -18,6 +18,6 @@
         {% endbuttons %}
     </form>
 
-    <a href="{% url 'jam:part-submit-upload' problem.slug part.pk %}"
+    <a href="{% url 'contest:part-submit-upload' problem.slug part.pk %}"
        class="btn btn-secondary">Upload File</a>
 {% endblock %}

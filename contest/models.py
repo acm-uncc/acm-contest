@@ -17,7 +17,7 @@ class Problem(models.Model):
     description = models.TextField()
 
     def get_absolute_url(self):
-        return reverse('jam:problem', kwargs=dict(slug=self.slug))
+        return reverse('contest:problem', kwargs=dict(slug=self.slug))
 
     def __str__(self):
         return f'{self.title} ({self.slug})'
@@ -63,7 +63,7 @@ class Submission(models.Model):
     correct = models.BooleanField(default=False)
 
     def get_absolute_url(self):
-        return reverse('jam:submission', kwargs=dict(pk=self.pk))
+        return reverse('contest:submission', kwargs=dict(pk=self.pk))
 
     def save(self, *a, **kw):
         self.correct = normalize(self.submission) == normalize(self.part.solution)

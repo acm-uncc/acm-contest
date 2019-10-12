@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
                                   verbose_name='ID')),
                 ('submission', models.TextField(max_length=10000)),
                 ('part', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
-                                           to='jam.Part')),
+                                           to='contest.Part')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING,
                                            to=settings.AUTH_USER_MODEL)),
             ],
@@ -53,6 +53,6 @@ class Migration(migrations.Migration):
             model_name='part',
             name='problem',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
-                                    to='jam.Problem'),
+                                    to='contest.Problem'),
         ),
     ]

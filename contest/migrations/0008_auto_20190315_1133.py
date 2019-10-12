@@ -8,7 +8,7 @@ from django.utils.timezone import utc
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('jam', '0007_submission_time'),
+        ('contest', '0007_submission_time'),
     ]
 
     operations = [

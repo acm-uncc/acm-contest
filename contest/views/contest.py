@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic.detail import SingleObjectMixin
 
-from jam import models
+from contest import models
 
 
 class Index(generic.ListView):
@@ -30,7 +30,7 @@ class ProblemDetail(generic.DetailView):
 
 
 class ProblemCreate(authmixins.PermissionRequiredMixin, generic.CreateView):
-    permission_required = 'jam.add_problem'
+    permission_required = 'contest.add_problem'
 
     model = models.Problem
     template_name = 'jam/problem_create.html'
@@ -39,14 +39,14 @@ class ProblemCreate(authmixins.PermissionRequiredMixin, generic.CreateView):
 
 
 class ProblemDelete(authmixins.PermissionRequiredMixin, generic.DeleteView):
-    permission_required = 'jam.delete_problem'
+    permission_required = 'contest.delete_problem'
 
     model = models.Problem
-    success_url = reverse_lazy('jam:index')
+    success_url = reverse_lazy('contest:index')
 
 
 class ProblemUpdate(authmixins.PermissionRequiredMixin, generic.UpdateView):
-    permission_required = 'jam.update_problem'
+    permission_required = 'contest.update_problem'
 
     model = models.Problem
     template_name = 'jam/problem_update.html'
@@ -55,7 +55,7 @@ class ProblemUpdate(authmixins.PermissionRequiredMixin, generic.UpdateView):
 
 
 class PartCreate(authmixins.PermissionRequiredMixin, generic.CreateView):
-    permission_required = 'jam.create_part'
+    permission_required = 'contest.create_part'
 
     model = models.Part
     template_name = 'jam/part_create.html'
@@ -73,7 +73,7 @@ class PartCreate(authmixins.PermissionRequiredMixin, generic.CreateView):
 
 
 class PartCreateUpload(authmixins.PermissionRequiredMixin, generic.CreateView):
-    permission_required = 'jam.create_part'
+    permission_required = 'contest.create_part'
 
     model = models.Part
     template_name = 'jam/part_create_upload.html'
@@ -104,16 +104,16 @@ class PartCreateUpload(authmixins.PermissionRequiredMixin, generic.CreateView):
 
 
 class PartDelete(authmixins.PermissionRequiredMixin, generic.DeleteView):
-    permission_required = 'jam.delete_part'
+    permission_required = 'contest.delete_part'
 
     model = models.Part
 
     def get_success_url(self):
-        return reverse_lazy('jam:problem', kwargs=dict(slug=self.kwargs['problem']))
+        return reverse_lazy('contest:problem', kwargs=dict(slug=self.kwargs['problem']))
 
 
 class PartUpdate(authmixins.PermissionRequiredMixin, generic.UpdateView):
-    permission_required = 'jam.update_part'
+    permission_required = 'contest.update_part'
 
     model = models.Part
     template_name = 'jam/part_update.html'
