@@ -1,15 +1,12 @@
+from django import forms
+from django.contrib.auth import mixins as authmixins
 from django.contrib.auth.models import User
-from django.forms import FileInput
 from django.http import HttpResponse
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic.detail import SingleObjectMixin
 
 from jam import models
-
-from django import forms
-from django.contrib.auth import mixins as authmixins
 
 
 class Index(generic.ListView):
@@ -85,8 +82,8 @@ class PartCreateUpload(authmixins.PermissionRequiredMixin, generic.CreateView):
         models.Part,
         fields=('title', 'slug', 'points', 'input', 'solution'),
         field_classes=(
-        forms.CharField, forms.SlugField, forms.IntegerField, forms.FileField,
-        forms.FileField)
+            forms.CharField, forms.SlugField, forms.IntegerField, forms.FileField,
+            forms.FileField)
     )
 
     def get_form(self, form_class=None):

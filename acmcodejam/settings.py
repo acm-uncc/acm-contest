@@ -9,10 +9,12 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
-
 import os
 
+import logging
 import django_heroku
+
+CONFIGURATION = os.getenv('CONFIGURATION', 'RELEASE')
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,9 +26,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '10&08-9&16*%a@(_=*)b209emqs0-$t94ezz=-=e5#c32543m-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = CONFIGURATION == 'DEBUG'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0']
 
 # Application definition
 
@@ -137,4 +139,4 @@ MARKDOWN_FILTER_WHITELIST_TAGS = [
     'ul', 'ol', 'li', 'br'
 ]
 
-django_heroku.settings(locals())
+django_heroku.settings(locals(), logging=not DEBUG, databases=not DEBUG)
