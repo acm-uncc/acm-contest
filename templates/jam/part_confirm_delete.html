@@ -11,10 +11,12 @@
         {% csrf_token %}
 
         <h3>Are you sure?</h3>
-        <p>You are about to delete part {{ part.title }} of problem {{ part.problem.title }}</p>
+        <p>You are about to delete part {{ part.title }} of
+            problem {{ part.problem.title }}</p>
 
         <input type="submit" value="Confirm" class="btn btn-danger">
 
-        <a href="{% url 'jam:problem' part.problem.slug %}" class="btn btn-success">Cancel</a>
+        <a href="{% url 'jam:problem' part.problem.slug %}"
+           class="btn btn-success">Cancel</a>
     </form>
 {% endblock %}

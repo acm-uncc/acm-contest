@@ -6,7 +6,7 @@
 
 {% block head %}
     {# Automatically refresh every few seconds #}
-{#    <meta http-equiv="refresh" content="30">#}
+    {#    <meta http-equiv="refresh" content="30">#}
 {% endblock %}
 
 {% block content %}
@@ -21,36 +21,72 @@
         </tr>
         </thead>
         <tbody>
-            <tr><th scope="row">1</th><td>marx</td><td>70</td></tr>
-            <tr><th scope="row">2</th><td>nop_nop</td><td>70</td></tr>
-            <tr><th scope="row">3</th><td>JordanCottle</td><td>70</td></tr>
-            <tr><th scope="row">4</th><td>teamhyd</td><td>20</td></tr>
-            <tr><th scope="row">5</th><td>AI_Aldron_Intelligence</td><td>20</td></tr>
-            <tr><th scope="row">6</th><td>Obaunin</td><td>20</td></tr>
-            <tr><th scope="row">7</th><td>eamono</td><td>20</td></tr>
-            <tr><th scope="row">8</th><td>Ed</td><td>10</td></tr>
-            <tr><th scope="row">9</th><td>bnice2max</td><td>10</td></tr>
+        <tr>
+            <th scope="row">1</th>
+            <td>marx</td>
+            <td>70</td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>nop_nop</td>
+            <td>70</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>JordanCottle</td>
+            <td>70</td>
+        </tr>
+        <tr>
+            <th scope="row">4</th>
+            <td>teamhyd</td>
+            <td>20</td>
+        </tr>
+        <tr>
+            <th scope="row">5</th>
+            <td>AI_Aldron_Intelligence</td>
+            <td>20</td>
+        </tr>
+        <tr>
+            <th scope="row">6</th>
+            <td>Obaunin</td>
+            <td>20</td>
+        </tr>
+        <tr>
+            <th scope="row">7</th>
+            <td>eamono</td>
+            <td>20</td>
+        </tr>
+        <tr>
+            <th scope="row">8</th>
+            <td>Ed</td>
+            <td>10</td>
+        </tr>
+        <tr>
+            <th scope="row">9</th>
+            <td>bnice2max</td>
+            <td>10</td>
+        </tr>
         </tbody>
     </table>
 
-{#    <h1 class="text-center">Scoreboard</h1>#}
-{#    #}
-{#    <table class="table">#}
-{#        <thead class="thead-dark">#}
-{#        <tr>#}
-{#            <th scope="col">#</th>#}
-{#            <th scope="col">User</th>#}
-{#            <th scope="col">Score</th>#}
-{#        </tr>#}
-{#        </thead>#}
-{#        <tbody>#}
-{#        {% for u in user_list %}#}
-{#            <tr>#}
-{#                <th scope="row">{{ forloop.counter }}</th>#}
-{#                <td>{{ u.username }}</td>#}
-{#                <td>{{ u.score.points }}</td>#}
-{#            </tr>#}
-{#        {% endfor %}#}
-{#        </tbody>#}
-{#    </table>#}
+    {#    <h1 class="text-center">Scoreboard</h1>#}
+    {#    #}
+    {#    <table class="table">#}
+    {#        <thead class="thead-dark">#}
+    {#        <tr>#}
+    {#            <th scope="col">#</th>#}
+    {#            <th scope="col">User</th>#}
+    {#            <th scope="col">Score</th>#}
+    {#        </tr>#}
+    {#        </thead>#}
+    {#        <tbody>#}
+    {#        {% for u in user_list %}#}
+    {#            <tr>#}
+    {#                <th scope="row">{{ forloop.counter }}</th>#}
+    {#                <td>{{ u.username }}</td>#}
+    {#                <td>{{ u.score.points }}</td>#}
+    {#            </tr>#}
+    {#        {% endfor %}#}
+    {#        </tbody>#}
+    {#    </table>#}
 {% endblock %}

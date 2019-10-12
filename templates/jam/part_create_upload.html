@@ -25,15 +25,18 @@
         </div>
 
         <div class="custom-file mb-2">
-            <input type="file" class="custom-file-input" name="{{ form.input.name }}" id="{{ form.input.auto_id }}"
+            <input type="file" class="custom-file-input" name="{{ form.input.name }}"
+                   id="{{ form.input.auto_id }}"
                    required>
-            <label for="{{ form.input.auto_id }}" class="custom-file-label">{{ form.input.label }}</label>
+            <label for="{{ form.input.auto_id }}"
+                   class="custom-file-label">{{ form.input.label }}</label>
         </div>
 
         <div class="custom-file mb-2">
             <input type="file" class="custom-file-input" name="{{ form.solution.name }}"
                    id="{{ form.solution.auto_id }}" required>
-            <label for="{{ form.solution.auto_id }}" class="custom-file-label">{{ form.solution.label }}</label>
+            <label for="{{ form.solution.auto_id }}"
+                   class="custom-file-label">{{ form.solution.label }}</label>
         </div>
 
         <button type="submit" class="btn btn-success">Submit</button>
@@ -52,5 +55,6 @@
         </script>
     </form>
 
-    <a href="{% url 'jam:part-create' problem.slug %}" class="btn btn-secondary">Paste Text</a>
+    <a href="{% url 'jam:part-create' problem.slug %}" class="btn btn-secondary">Paste
+        Text</a>
 {% endblock %}

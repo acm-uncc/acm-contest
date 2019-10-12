@@ -28,7 +28,8 @@
         {% for submission in submission_list %}
             <tr>
                 <td scope="row">
-                    <a href="{{ submission.part.problem.get_absolute_url }}" class="btn btn-outline-dark">
+                    <a href="{{ submission.part.problem.get_absolute_url }}"
+                       class="btn btn-outline-dark">
                         {{ submission.part.problem.title }}
                     </a>
                 </td>

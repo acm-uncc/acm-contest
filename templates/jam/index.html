@@ -8,15 +8,19 @@
     <div class="card text-center">
         <div class="card-body">
             <h1 class="card-title">Contest Finished</h1>
-            <h4 class="card-text">The contest is over, but you can still submit solutions. The scoreboard is frozen with the results from the contest.</h4>
+            <h4 class="card-text">The contest is over, but you can still submit solutions.
+                The scoreboard is frozen with the results from the contest.</h4>
 
-            <h4 class="card-text">On <strong>Thursday, March 21</strong>, we will be meeting to discuss solutions and strategies.</h4>
-            <h4>Be sure to join our Discord server and Niner Engage for updates and information.</h4>
+            <h4 class="card-text">On <strong>Thursday, March 21</strong>, we will be
+                meeting to discuss solutions and strategies.</h4>
+            <h4>Be sure to join our Discord server and Niner Engage for updates and
+                information.</h4>
 
             <span>
                 <a href="https://discord.gg/v7vVN6" class="btn btn-success
 btn-lg">Discord</a>
-                <a href="https://ninerengage.uncc.edu/organization/association-for-computing-machinery" class="btn btn-success
+                <a href="https://ninerengage.uncc.edu/organization/association-for-computing-machinery"
+                   class="btn btn-success
 btn-lg">Niner Engage</a>
             </span>
         </div>
@@ -28,7 +32,8 @@ btn-lg">Niner Engage</a>
 
     <div class="list-group mb-2">
         {% for problem in problem_list %}
-            <a href="{{ problem.get_absolute_url }}" class="list-group-item list-group-item-action">
+            <a href="{{ problem.get_absolute_url }}"
+               class="list-group-item list-group-item-action">
                 {{ problem.title }}
 
                 <span class="float-right">
@@ -44,6 +49,7 @@ btn-lg">Niner Engage</a>
     </div>
 
     {% if perms.jam.add_problem %}
-        <a href="{% url 'jam:problem-create' %}" class="btn btn-outline-success mb-4">Add Problem</a>
+        <a href="{% url 'jam:problem-create' %}" class="btn btn-outline-success mb-4">Add
+            Problem</a>
     {% endif %}
 {% endblock %}

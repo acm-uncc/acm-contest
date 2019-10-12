@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from django.db.models import Count, Q
 from django.forms import FileInput
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -85,7 +84,9 @@ class PartCreateUpload(authmixins.PermissionRequiredMixin, generic.CreateView):
     form_class = forms.modelform_factory(
         models.Part,
         fields=('title', 'slug', 'points', 'input', 'solution'),
-        field_classes=(forms.CharField, forms.SlugField, forms.IntegerField, forms.FileField, forms.FileField)
+        field_classes=(
+        forms.CharField, forms.SlugField, forms.IntegerField, forms.FileField,
+        forms.FileField)
     )
 
     def get_form(self, form_class=None):

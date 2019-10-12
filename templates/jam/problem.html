@@ -20,13 +20,16 @@
                     <div class="card-footer">
                 <span class="float-right">
                     {% if perms.jam.update_problem and perms.jam.create_part %}
-                        <a href="{% url 'jam:part-create' problem.slug %}" class="btn btn-secondary">New Part</a>
+                        <a href="{% url 'jam:part-create' problem.slug %}"
+                           class="btn btn-secondary">New Part</a>
                     {% endif %}
                     {% if perms.jam.update_problem %}
-                        <a href="{% url 'jam:problem-update' problem.slug %}" class="btn btn-secondary">Edit</a>
+                        <a href="{% url 'jam:problem-update' problem.slug %}"
+                           class="btn btn-secondary">Edit</a>
                     {% endif %}
                     {% if perms.jam.delete_problem %}
-                        <a href="{% url 'jam:problem-delete' problem.slug %}" class="btn btn-danger">Delete</a>
+                        <a href="{% url 'jam:problem-delete' problem.slug %}"
+                           class="btn btn-danger">Delete</a>
                     {% endif %}
                 </span>
                     </div>
@@ -37,7 +40,8 @@
             {% for part in problem.part_set.all|dictsort:"points" %}
                 <div class="card mb-2">
                     <div class="card-body">
-                        <h4 class="float-left">{{ part.title }} ({{ part.points }} pts)</h4>
+                        <h4 class="float-left">{{ part.title }} ({{ part.points }}
+                            pts)</h4>
                         <div class="float-right">
                             {% if part.input %}
                                 <a href="{% url 'jam:part-download' part.pk problem.slug part.slug %}"
@@ -46,7 +50,8 @@
                                 </a>
                             {% endif %}
 
-                            <a href="{% url 'jam:part-submit' problem.slug part.pk %}" class="btn btn-success">
+                            <a href="{% url 'jam:part-submit' problem.slug part.pk %}"
+                               class="btn btn-success">
                                 Submit
                             </a>
                             {% if perms.jam.delete_part or perms.jam.update_part %}
@@ -58,7 +63,8 @@
                                 {% endif %}
 
                                 {% if perms.jam.delete_part %}
-                                    <a href="{% url 'jam:part-delete' problem.slug part.pk %}" class="btn btn-danger">
+                                    <a href="{% url 'jam:part-delete' problem.slug part.pk %}"
+                                       class="btn btn-danger">
                                         Delete
                                     </a>
                                 {% endif %}
