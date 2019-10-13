@@ -16,6 +16,9 @@ class Problem(models.Model):
 
     description = models.TextField()
 
+    input = models.TextField(blank=True)
+    solution = models.TextField(blank=True)
+
     def get_absolute_url(self):
         return reverse('contest:problem', kwargs=dict(slug=self.slug))
 
@@ -23,31 +26,20 @@ class Problem(models.Model):
         return f'{self.title} ({self.slug})'
 
 
-class Part(models.Model):
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
-
-    title = models.CharField(max_length=255)
-    slug = models.SlugField()
-    points = models.IntegerField()
-
-    input = models.TextField(blank=True)
-    solution = models.TextField(blank=True)
-
-    def get_absolute_url(self):
-        return self.problem.get_absolute_url()
-
-    def __str__(self):
-        return f'{self.problem} : {self.title} ({self.slug})'
-
-
 class Score(models.Model):
     user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     points = models.IntegerField(default=0)
 
+    @property
+    def correct_submissions(self):
+        return Submission.objects.filter(user=self.user, correct=True)
+
+    @property
+    def solved_problems(self):
+        return {sub.problem for sub in self.correct_submissions}
+
     def recompute(self):
-        subs = Submission.objects.filter(user=self.user, correct=True)
-        parts = {sub.part for sub in subs}
-        self.points = sum(part.points for part in parts)
+        self.points = len(self.solved_problems)
         self.save()
 
     def __str__(self):
@@ -55,7 +47,7 @@ class Score(models.Model):
 
 
 class Submission(models.Model):
-    part = models.ForeignKey(Part, on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 
     time = models.DateTimeField(default=datetime.datetime(1970, 1, 1, tzinfo=pytz.utc))
@@ -66,7 +58,7 @@ class Submission(models.Model):
         return reverse('contest:submission', kwargs=dict(pk=self.pk))
 
     def save(self, *a, **kw):
-        self.correct = normalize(self.submission) == normalize(self.part.solution)
+        self.correct = normalize(self.submission) == normalize(self.problem.solution)
         self.time = datetime.datetime.now()
         super(Submission, self).save(*a, **kw)
 
@@ -76,8 +68,7 @@ class Submission(models.Model):
     def __str__(self):
         return (
             f'{self.user.username} - '
-            f'{self.part.problem.title} : {self.part.title} '
-            f'({self.part.problem.slug}-{self.part.slug}) - '
+            f'{self.problem.title} ({self.problem.slug}) - '
             f'{"correct" if self.correct else "incorrect"} - '
             f'{self.time:%m/%d/%y %I:%M %p}'
         )

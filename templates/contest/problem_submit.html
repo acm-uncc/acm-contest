@@ -8,7 +8,7 @@
 
 {% block content %}
     <h1>Submit</h1>
-    <h2>{{ problem.title }} {{ part.title }}</h2>
+    <h2>{{ problem.title }}</h2>
 
     <form method="post">
         {% csrf_token %}
@@ -18,6 +18,6 @@
         {% endbuttons %}
     </form>
 
-    <a href="{% url 'contest:part-submit-upload' problem.slug part.pk %}"
+    <a href="{% url 'contest:problem-submit-upload' problem.slug %}"
        class="btn btn-secondary">Upload File</a>
 {% endblock %}

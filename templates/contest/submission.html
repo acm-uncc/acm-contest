@@ -10,7 +10,7 @@
     <h1 class="text-center">Submission Details</h1>
 
     <h1>
-        {{ submission.part.problem.title }}: {{ submission.part.title }}
+        {{ submission.problem.title }}
         {% if submission.correct %}
             <span class="float-right badge badge-success">
                 <i class="fa fa-check fa-fw" aria-hidden="true"></i> Correct
@@ -31,10 +31,10 @@
     <a href="{% url 'contest:submissions' %}" class="btn btn-outline-secondary">Other
         Submissions</a>
 
-    <a href="{{ submission.part.problem.get_absolute_url }}"
+    <a href="{{ submission.problem.get_absolute_url }}"
        class="btn btn-outline-secondary">Back
-        to {{ submission.part.problem.title }}</a>
+        to {{ submission.problem.title }}</a>
 
-    <a href="{% url 'contest:part-submit' submission.part.problem.slug submission.part.pk %}"
+    <a href="{% url 'contest:problem-submit' submission.problem.slug %}"
        class="btn btn-outline-success">Submit Again</a>
 {% endblock %}

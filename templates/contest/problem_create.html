@@ -3,11 +3,11 @@
 {% load bootstrap4 %}
 
 {% block title %}
-    Update Part
+    New Problem
 {% endblock %}
 
 {% block content %}
-    <h1>Update Part {{ part.title }} of Problem {{ problem.title }}</h1>
+    <h1>Create Problem</h1>
 
     <form action="#" method="post">
         {% csrf_token %}
@@ -16,18 +16,22 @@
             <div class="col">
                 {% bootstrap_field form.title %}
             </div>
-            <div class="col-3">
+            <div class="col-4">
                 {% bootstrap_field form.slug %}
             </div>
-            <div class="col-4">
-                {% bootstrap_field form.points %}
-            </div>
         </div>
+
+        {% bootstrap_field form.description %}
 
         {% bootstrap_field form.input %}
         {% bootstrap_field form.solution %}
 
-        <button type="submit" class="btn btn-success">Submit</button>
-        <a href="{% url 'contest:problem' problem.slug %}" class="btn btn-danger">Cancel</a>
+        {% buttons %}
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a href="{% url 'contest:index' %}" class="btn btn-danger">Cancel</a>
+        {% endbuttons %}
     </form>
+
+    <a href="{% url 'contest:problem-create-upload' %}" class="btn btn-secondary">
+        Upload Files</a>
 {% endblock %}

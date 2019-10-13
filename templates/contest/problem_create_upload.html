@@ -3,31 +3,29 @@
 {% load bootstrap4 %}
 
 {% block title %}
-    New Part
+    New Problem
 {% endblock %}
 
 {% block content %}
-    <h1>Create Part</h1>
+    <h1>Create Problem</h1>
 
-    <form method="post" class="mb-2" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="form-row">
             <div class="col">
                 {% bootstrap_field form.title %}
             </div>
-            <div class="col-3">
+            <div class="col-4">
                 {% bootstrap_field form.slug %}
-            </div>
-            <div class="col-3">
-                {% bootstrap_field form.points %}
             </div>
         </div>
 
+        {% bootstrap_field form.description %}
+
         <div class="custom-file mb-2">
             <input type="file" class="custom-file-input" name="{{ form.input.name }}"
-                   id="{{ form.input.auto_id }}"
-                   required>
+                   id="{{ form.input.auto_id }}" required>
             <label for="{{ form.input.auto_id }}"
                    class="custom-file-label">{{ form.input.label }}</label>
         </div>
@@ -39,8 +37,10 @@
                    class="custom-file-label">{{ form.solution.label }}</label>
         </div>
 
-        <button type="submit" class="btn btn-success">Submit</button>
-        <a href="{% url 'contest:problem' problem.slug %}" class="btn btn-danger">Cancel</a>
+        {% buttons %}
+            <button type="submit" class="btn btn-success">Submit</button>
+            <a href="{% url 'contest:index' %}" class="btn btn-danger">Cancel</a>
+        {% endbuttons %}
 
         <script type="application/javascript">
             $('#{{ form.input.auto_id }}').change(function (e) {
@@ -55,6 +55,6 @@
         </script>
     </form>
 
-    <a href="{% url 'contest:part-create' problem.slug %}" class="btn btn-secondary">Paste
-        Text</a>
+    <a href="{% url 'contest:problem-create' %}" class="btn btn-secondary">
+        Paste Files</a>
 {% endblock %}

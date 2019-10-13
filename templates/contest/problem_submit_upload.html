@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block title %}
+    Submit
+{% endblock %}
+
+{% block content %}
+    <h1>Submit</h1>
+    <h2>{{ problem.title }}</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="custom-file mb-2">
+            <input type="file" class="custom-file-input" name="{{ form.submission.name }}"
+                   id="{{ form.submission.auto_id }}"
+                   required>
+            <label for="{{ form.submission.auto_id }}"
+                   class="custom-file-label">{{ form.submission.label }}</label>
+        </div>
+
+        {% buttons %}
+            <button type="submit" class="btn btn-success">Submit</button>
+        {% endbuttons %}
+
+        <script type="application/javascript">
+            $('#{{ form.submission.auto_id }}').change(function (e) {
+                let name = e.target.files[0].name;
+                $('.custom-file-label[for={{ form.submission.auto_id }}]').html(name);
+            });
+        </script>
+    </form>
+
+    <a href="{% url 'contest:problem-submit' problem.slug %}"
+       class="btn btn-secondary">Paste File</a>
+{% endblock %}
