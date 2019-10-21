@@ -13,11 +13,9 @@ urlpatterns = [
     path('signup', views.SignupView.as_view(), name='signup'),
 
     path('p/new', views.ProblemCreate.as_view(), name='problem-create'),
-    path('p/new/upload', views.ProblemCreateUpload.as_view(),
-         name='problem-create-upload'),
-    path('p/<slug>/delete', views.ProblemDelete.as_view(), name='problem-delete'),
-    path('p/<slug>/update', views.ProblemUpdate.as_view(), name='problem-update'),
     path('p/<slug>', views.ProblemDetail.as_view(), name='problem'),
+    path('p/<slug>/update', views.ProblemUpdateUpload.as_view(), name='problem-update'),
+    path('p/<slug>/delete', views.ProblemDelete.as_view(), name='problem-delete'),
     path('p/<slug>/submit', views.ProblemSubmit.as_view(), name='problem-submit'),
     path('p/<slug>/submit/upload', views.ProblemSubmitUpload.as_view(),
          name='problem-submit-upload'),

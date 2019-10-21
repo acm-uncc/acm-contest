@@ -48,15 +48,6 @@ class ProblemCreate(authmixins.PermissionRequiredMixin, generic.CreateView):
     model = models.Problem
     template_name = 'contest/problem_create.html'
 
-    fields = 'title', 'slug', 'description', 'input', 'solution'
-
-
-class ProblemCreateUpload(authmixins.PermissionRequiredMixin, generic.CreateView):
-    permission_required = 'contest.add_problem'
-
-    model = models.Problem
-    template_name = 'contest/problem_create_upload.html'
-
     form_class = forms.modelform_factory(
         models.Problem,
         fields=('title', 'slug', 'description',
@@ -65,15 +56,47 @@ class ProblemCreateUpload(authmixins.PermissionRequiredMixin, generic.CreateView
                        forms.FileField, forms.FileField)
     )
 
-    def get_form(self, form_class=None):
-        cls = form_class or self.get_form_class()
-        return cls(self.request.POST, self.request.FILES)
+    def form_valid(self, form):
+        if 'input' in form.files:
+            form.instance.input = form.files['input'].read().decode('utf-8')
+        else:
+            form.instance.input = ''
+
+        if 'solution' in form.files:
+            form.instance.solution = form.files['solution'].read().decode('utf-8')
+        else:
+            form.instance.input = ''
+
+        return super(ProblemCreate, self).form_valid(form)
+
+
+class ProblemUpdateUpload(authmixins.PermissionRequiredMixin, generic.UpdateView):
+    permission_required = 'contest.update_problem'
+
+    model = models.Problem
+    template_name = 'contest/problem_update.html'
+
+    form_class = forms.modelform_factory(
+        models.Problem,
+        fields=('title', 'slug', 'description',
+                'input', 'solution'),
+        field_classes=(forms.CharField, forms.SlugField, forms.Textarea)
+    )
 
     def form_valid(self, form):
-        form.instance.input = form.files['input'].read().decode('utf-8')
-        form.instance.solution = form.files['solution'].read().decode('utf-8')
+        obj = self.get_object()
 
-        return super(ProblemCreateUpload, self).form_valid(form)
+        if 'input' in form.files:
+            form.instance.input = form.files['input'].read().decode('utf-8')
+        else:
+            form.instance.input = obj.input
+
+        if 'solution' in form.files:
+            form.instance.solution = form.files['solution'].read().decode('utf-8')
+        else:
+            form.instance.solution = obj.solution
+
+        return super(ProblemUpdateUpload, self).form_valid(form)
 
 
 class ProblemDelete(authmixins.PermissionRequiredMixin, generic.DeleteView):
@@ -81,15 +104,6 @@ class ProblemDelete(authmixins.PermissionRequiredMixin, generic.DeleteView):
 
     model = models.Problem
     success_url = reverse_lazy('contest:index')
-
-
-class ProblemUpdate(authmixins.PermissionRequiredMixin, generic.UpdateView):
-    permission_required = 'contest.update_problem'
-
-    model = models.Problem
-    template_name = 'contest/problem_update.html'
-
-    fields = 'title', 'description', 'input', 'solution'
 
 
 class ProblemDownload(SingleObjectMixin, generic.View):
@@ -132,32 +146,16 @@ class ProblemSubmit(authmixins.LoginRequiredMixin, generic.FormView):
 class ProblemSubmitUpload(ProblemSubmit):
     template_name = 'contest/problem_submit_upload.html'
 
-    form_class = forms.modelform_factory(
-        models.Submission,
-        fields=('submission',),
-        field_classes=(forms.FileField,)
-    )
-
-    class form_class(forms.Form):
+    class SubmissionForm(forms.Form):
         submission = forms.FileField()
 
-    def get_form(self, form_class=None):
-        cls = form_class or self.get_form_class()
-        return cls(self.request.POST, self.request.FILES)
+    form_class = SubmissionForm
 
     def form_valid(self, form):
-        f = form.files['submission']
-        form.instance = models.Submission.objects.create(
-            problem=models.Problem.objects.get(slug=self.kwargs['slug']),
-            user=User.objects.get(id=self.request.user.id),
-            submission=f.read().decode('utf-8')
-        )
+        sub = form.files['submission'].read().decode('utf-8')
+        form.cleaned_data['submission'] = sub
 
-        form.instance.save()
-
-        self.submission = form.instance
-
-        return super(ProblemSubmit, self).form_valid(form)
+        return super(ProblemSubmitUpload, self).form_valid(form)
 
 
 class SubmissionDetail(generic.DetailView):

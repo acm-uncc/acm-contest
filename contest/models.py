@@ -16,8 +16,8 @@ class Problem(models.Model):
 
     description = models.TextField()
 
-    input = models.TextField(blank=True)
-    solution = models.TextField(blank=True)
+    input = models.TextField(null=True, blank=True)
+    solution = models.TextField(null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('contest:problem', kwargs=dict(slug=self.slug))

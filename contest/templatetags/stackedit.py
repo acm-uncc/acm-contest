@@ -1,16 +1,28 @@
+import re
+
 import bleach
 import markdown2
-from bleach import ALLOWED_ATTRIBUTES
 from django import template
 from django.conf import settings
-from pygments.styles import get_all_styles
 
 register = template.Library()
 
 
 @register.filter
+def katex(text):
+    def escaper(m):
+        return re.sub(r'([*_^])', r'\\\1', m[0])
+
+    return re.sub(r'(\${1,2}).*?\1', escaper, text)
+
+
+@register.filter
 def markdown(text):
+    text = katex(text)
     text = markdown2.markdown(text, extras=['code-friendly', 'fenced-code-blocks'])
-    html = bleach.clean(text, tags=settings.MARKDOWN_FILTER_WHITELIST_TAGS,
-                        attributes={'div': ['class'], 'span': ['class']})
-    return bleach.linkify(html)
+    text = bleach.clean(text, tags=settings.MARKDOWN_FILTER_WHITELIST_TAGS, attributes={
+        'div': ['class'],
+        'span': ['class']
+    })
+    text = bleach.linkify(text)
+    return text
