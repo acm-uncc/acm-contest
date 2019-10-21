@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'contest',
     'bootstrap4',
-    'markdown_filter',
 ]
 
 MIDDLEWARE = [
@@ -137,7 +136,8 @@ MARKDOWN_FILTER_WHITELIST_TAGS = [
     'p', 'img',
     'code', 'pre', 'a', 'em', 'strong',
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-    'ul', 'ol', 'li', 'br'
+    'ul', 'ol', 'li', 'br',
+    'blockquote', 'div', 'span'
 ]
 
 django_heroku.settings(locals(), logging=not DEBUG, databases=not DEBUG)

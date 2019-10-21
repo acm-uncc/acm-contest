@@ -7,12 +7,12 @@ verify_ssl = true
 
 [packages]
 Django = "*"
+markdown2 = "*"
 django-bootstrap4 = "*"
-django-markdown-filter = "*"
-
 gunicorn = "*"
-
 django-heroku = "*"
+bleach = "*"
+pygments = "*"
 
 [requires]
 python_version = "3.8"
