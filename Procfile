@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn acmcodejam.wsgi
+web: gunicorn acm_uncc.wsgi

@@ -1,34 +1,40 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'jam:index' %}">Index</a>
+        <a class="navbar-brand" href="{% url 'contest:index' %}">Index</a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a href="{% url 'jam:scoreboard' %}" class="nav-link">Scoreboard</a>
+                    <a href="{% url 'contest:scoreboard' %}" class="nav-link">Scoreboard</a>
                 </li>
 
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a href="{% url 'jam:submissions' %}" class="nav-link">My Submissions</a>
+                        <a href="{% url 'contest:submissions' %}" class="nav-link">My
+                            Submissions</a>
                     </li>
                 {% endif %}
             </ul>
 
             {% if user.is_authenticated %}
                 {% if user.is_staff %}
-                    <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary">Admin Page</a>
+                    <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary">Admin
+                        Page</a>
                 {% endif %}
-                <a href="{% url 'jam:logout' %}?next={{ request.path }}"
+                <a href="{% url 'contest:logout' %}?next={{ request.path }}"
                    class="btn btn-outline-secondary ml-3">Logout {{ user.username }}</a>
             {% else %}
-                <a href="{% url 'jam:login' %}?next={{ request.path }}" class="btn btn-outline-secondary ml-3">Login</a>
-                <a href="{% url 'jam:signup' %}?next={{ request.path }}" class="btn btn-outline-secondary ml-3">Sign
+                <a href="{% url 'contest:login' %}?next={{ request.path }}"
+                   class="btn btn-outline-secondary ml-3">Login</a>
+                <a href="{% url 'contest:signup' %}?next={{ request.path }}"
+                   class="btn btn-outline-secondary ml-3">Sign
                     Up</a>
             {% endif %}
         </div>
