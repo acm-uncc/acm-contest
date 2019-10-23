@@ -4,6 +4,7 @@ import pytz
 from django.conf.global_settings import AUTH_USER_MODEL
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 
 def normalize(submission: str):
@@ -29,6 +30,7 @@ class Problem(models.Model):
 class Score(models.Model):
     user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     points = models.IntegerField(default=0)
+    minutes = models.IntegerField(default=0)
 
     @property
     def correct_submissions(self):
@@ -38,12 +40,44 @@ class Score(models.Model):
     def solved_problems(self):
         return {sub.problem for sub in self.correct_submissions}
 
+    def get_first_solution(self, problem):
+        solved = Submission.objects.filter(user=self.user, problem=problem,
+                                           correct=True).order_by('time')
+        if solved:
+            return solved[0]
+        return None
+
+    def get_bad_attempts(self, problem):
+        first_solution = self.get_first_solution(problem)
+        if first_solution is None:
+            attempts = Submission.objects.filter(user=self.user, problem=problem,
+                                                 correct=False)
+        else:
+            attempts = Submission.objects.filter(user=self.user, problem=problem,
+                                                 correct=False,
+                                                 time__lt=first_solution.time)
+        return len(attempts)
+
+    def get_time(self, problem):
+        solution = self.get_first_solution(problem)
+        penalty = 20 * self.get_bad_attempts(problem)
+
+        if not solution:
+            return penalty
+
+        today = datetime.datetime.today()
+        start = today.replace(hour=18, minute=0, second=0, microsecond=0)
+
+        minutes = (solution.time - start).seconds // 60
+        return minutes + penalty
+
     def recompute(self):
         self.points = len(self.solved_problems)
+        self.minutes = sum(self.get_time(p) for p in self.solved_problems)
         self.save()
 
     def __str__(self):
-        return f'{self.user.name} score ({self.points} pts)'
+        return f'{self.user} score ({self.points} pts)'
 
 
 class Submission(models.Model):
@@ -51,15 +85,19 @@ class Submission(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
 
     time = models.DateTimeField(default=datetime.datetime(1970, 1, 1, tzinfo=pytz.utc))
-    submission = models.TextField()
     correct = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('contest:submission', kwargs=dict(pk=self.pk))
 
+    @classmethod
+    def grade(cls, problem, user, submission):
+        correct = problem.solution == submission
+        now = datetime.datetime.now()
+
+        return cls(problem=problem, user=user, time=now, correct=correct)
+
     def save(self, *a, **kw):
-        self.correct = normalize(self.submission) == normalize(self.problem.solution)
-        self.time = datetime.datetime.now()
         super(Submission, self).save(*a, **kw)
 
         score, created = Score.objects.get_or_create(user=self.user)

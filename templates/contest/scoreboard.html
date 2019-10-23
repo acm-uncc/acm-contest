@@ -1,23 +1,27 @@
 {% extends 'base.html' %}
 
+{% load scoreboard %}
+
 {% block title %}
     Scoreboard
 {% endblock %}
 
 {% block head %}
     {# Automatically refresh every few seconds #}
-    {#    <meta http-equiv="refresh" content="30">#}
+    <meta http-equiv="refresh" content="30">
 {% endblock %}
 
 {% block content %}
     <h1 class="text-center">Scoreboard</h1>
 
-    <table class="table text-center">
+    <table class="table text-center table-bordered" style="width: auto !important;
+    margin: 0 auto;">
         <thead class="thead-dark">
         <tr>
             <th scope="col">#</th>
             <th scope="col">User</th>
             <th scope="col">Score</th>
+            <th scope="col">Time</th>
 
             {% for problem in problems %}
                 <th scope="col">
@@ -31,17 +35,32 @@
         <tbody>
         {% for u in users %}
             <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>{{ u.username }}</td>
-                <td>{{ u.score.points }}</td>
+                <th class="align-middle" scope="row">{{ forloop.counter }}</th>
+                <td class="align-middle">{{ u.username }}</td>
+                <td class="align-middle">
+                    {{ u.score.points }}
+                </td>
+                <td class="align-middle">
+                    {{ u.score.minutes }}
+                </td>
 
                 {% for problem in problems %}
-                    {% if problem in u.score.solved_problems %}
-                        <td class="table-success"><i class="fa fa-check text-success"
-                                                     aria-hidden="true"></i></td>
+                    {% if u.score|is_solved:problem %}
+                        <td class="align-middle table-success">
+                            <i class="fa fa-check text-success"></i><br>
+                            {{ u.score|attempts:problem }}
+                            ({{ u.score|time:problem }})
+                        </td>
+                    {% elif u.score|attempts:problem %}
+                        <td class="align-middle table-danger">
+                            <i class="fa fa-times text-danger"></i><br>
+                            {{ u.score|attempts:problem }}
+                            ({{ u.score|time:problem }})
+                        </td>
                     {% else %}
-                        <td class="table-danger"><i class="fa fa-times text-danger"
-                                                    aria-hidden="true"></i></td>
+                        <td class="align-middle">
+                            <i class="fa fa-minus text-muted"></i>
+                        </td>
                     {% endif %}
                 {% endfor %}
             </tr>

@@ -23,18 +23,10 @@ class ScoreBoard(generic.TemplateView):
 
         ctx = super(ScoreBoard, self).get_context_data(**kwargs)
         ctx.update(
-            users=User.objects.filter(score__points__gt=0).order_by('-score__points'),
+            users=User.objects.order_by('-score__points', 'score__minutes', 'username'),
             problems=models.Problem.objects.order_by('title')
         )
         return ctx
-
-    #
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #
-    # def get_queryset(self):
-    #     for score in models.Score.objects.all():
-    #         score.recompute()
-    #     return User.objects.filter(score__points__gt=0).order_by('-score__points')
 
 
 class ProblemDetail(generic.DetailView):
@@ -117,7 +109,10 @@ class ProblemDownload(SingleObjectMixin, generic.View):
 class ProblemSubmit(authmixins.LoginRequiredMixin, generic.FormView):
     template_name = 'contest/problem_submit.html'
 
-    form_class = forms.modelform_factory(models.Submission, fields=('submission',))
+    class SubmissionForm(forms.Form):
+        submission = forms.CharField(widget=forms.Textarea)
+
+    form_class = SubmissionForm
 
     submission = None
 
@@ -127,12 +122,11 @@ class ProblemSubmit(authmixins.LoginRequiredMixin, generic.FormView):
         return ctx
 
     def form_valid(self, form):
-        form.instance = models.Submission.objects.create(
+        form.instance = models.Submission.grade(
             problem=models.Problem.objects.get(slug=self.kwargs['slug']),
             user=self.request.user,
             submission=form.cleaned_data['submission']
         )
-
         form.instance.save()
 
         self.submission = form.instance
