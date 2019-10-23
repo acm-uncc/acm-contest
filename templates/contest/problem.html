@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load stackedit %}
+
+{% block title %}
+    {{ problem.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="col-8 mx-auto">
+        <div class="card mb-3">
+            <div class="card-body">
+                <h1 class="card-title">{{ problem.title }}</h1>
+
+                <div class="card-text">
+                    {{ problem.description |markdown |safe }}
+                </div>
+            </div>
+
+            <div class="card-footer text-right">
+                {% if perms.contest.update_problem %}
+                    <a href="{% url 'contest:problem-update' problem.slug %}"
+                       class="btn btn-danger">
+                        Edit</a>
+                {% endif %}
+
+                {% if perms.contest.delete_problem %}
+                    <a href="{% url 'contest:problem-delete' problem.slug %}"
+                       class="btn btn-danger">
+                        Delete</a>
+                {% endif %}
+
+                {% if problem.input %}
+                    <a href="{% url 'contest:problem-download' problem.slug %}"
+                       download class="btn btn-primary">
+                        Input</a>
+                {% endif %}
+
+                {% if problem.solution %}
+                    <a href="{% url 'contest:problem-submit' problem.slug %}"
+                       class="btn btn-success">
+                        Submit</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
