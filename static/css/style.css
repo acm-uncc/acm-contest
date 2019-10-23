@@ -1,0 +1,21 @@
+.container-fluid {
+    max-width: 60%;
+    width: auto;
+}
+
+.redacted {
+    color: transparent;
+    background: black;
+}
+
+.redacted::selection{
+    color: white;
+}
+
+blockquote {
+    background: #f8f8f8;
+    padding: .5rem .5rem .5rem 1rem;
+    border: 1px solid lightgray;
+    border-left-width: .25rem;
+    border-radius: .25rem;
+}
