@@ -10,7 +10,6 @@
 
     {% for contest in contests %}
         <h2 class="text-center">{{ contest.title }}</h2>
-        <h5 class="text-center">{{ contest.start }} to {{ contest.end }}</h5>
 
         <div class="list-group mb-2">
             {% for problem in contest.problems.all %}
