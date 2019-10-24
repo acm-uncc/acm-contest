@@ -50,11 +50,11 @@
                 </td>
 
                 {% for problem in contest.problems.all %}
-                    {% if u.score|is_solved:problem,contest %}
+                    {% if u.score|is_solved:problem %}
                         <td class="align-middle table-success">
                             <i class="fa fa-check text-success"></i><br>
-                            {{ u.score|attempts:problem,contest }}
-                            ({{ u.score|time:problem,contest }})
+                            {{ u.score|attempts:problem }}
+                            ({{ u.score|time:problem }})
                         </td>
                     {% elif u.score|attempts:problem %}
                         <td class="align-middle table-danger">
