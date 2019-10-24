@@ -13,6 +13,11 @@
 
 {% block content %}
     <h1 class="text-center">Scoreboard</h1>
+    <hr>
+
+    {% for contest in contests %}
+        <h2 class="text-center">{{ contest.title }}</h2>
+        <h5 class="text-center">{{ contest.start }} to {{ contest.end }}</h5>
 
     <table class="table text-center table-bordered" style="width: auto !important;
     margin: 0 auto;">
@@ -23,7 +28,7 @@
             <th scope="col">Score</th>
             <th scope="col">Time</th>
 
-            {% for problem in problems %}
+            {% for problem in contest.problems.all %}
                 <th scope="col">
                     <a href="{% url 'contest:problem' problem.slug %}"
                        class="text-light">
@@ -44,12 +49,12 @@
                     {{ u.score.minutes }}
                 </td>
 
-                {% for problem in problems %}
-                    {% if u.score|is_solved:problem %}
+                {% for problem in contest.problems.all %}
+                    {% if u.score|is_solved:problem,contest %}
                         <td class="align-middle table-success">
                             <i class="fa fa-check text-success"></i><br>
-                            {{ u.score|attempts:problem }}
-                            ({{ u.score|time:problem }})
+                            {{ u.score|attempts:problem,contest }}
+                            ({{ u.score|time:problem,contest }})
                         </td>
                     {% elif u.score|attempts:problem %}
                         <td class="align-middle table-danger">
@@ -67,4 +72,5 @@
         {% endfor %}
         </tbody>
     </table>
+    {% endfor %}
 {% endblock %}

@@ -6,3 +6,4 @@ from contest import models
 admin.site.register(models.Score)
 admin.site.register(models.Problem)
 admin.site.register(models.Submission)
+admin.site.register(models.Contest)

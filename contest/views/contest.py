@@ -11,7 +11,10 @@ from contest import models
 
 class Index(generic.ListView):
     template_name = 'contest/index.html'
-    model = models.Problem
+    context_object_name = 'contests'
+
+    def get_queryset(self):
+        return models.Contest.active()
 
 
 class ScoreBoard(generic.TemplateView):
@@ -24,7 +27,7 @@ class ScoreBoard(generic.TemplateView):
         ctx = super(ScoreBoard, self).get_context_data(**kwargs)
         ctx.update(
             users=User.objects.order_by('-score__points', 'score__minutes', 'username'),
-            problems=models.Problem.objects.order_by('title')
+            contests=models.Contest.active()
         )
         return ctx
 

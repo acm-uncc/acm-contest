@@ -6,15 +6,22 @@
 
 {% block content %}
     <h1 class="text-center">Problem Index</h1>
+    <hr>
 
-    <div class="list-group mb-2">
-        {% for problem in problem_list %}
-            <a href="{{ problem.get_absolute_url }}"
-               class="list-group-item list-group-item-action">
-                {{ problem.title }}
-            </a>
-        {% endfor %}
-    </div>
+    {% for contest in contests %}
+        <h2 class="text-center">{{ contest.title }}</h2>
+        <h5 class="text-center">{{ contest.start }} to {{ contest.end }}</h5>
+
+        <div class="list-group mb-2">
+            {% for problem in contest.problems.all %}
+                <a href="{{ problem.get_absolute_url }}"
+                   class="list-group-item list-group-item-action">
+                    {{ problem.title }}
+                </a>
+            {% endfor %}
+
+        </div>
+    {% endfor %}
 
     {% if perms.jam.add_problem %}
         <a href="{% url 'contest:problem-create' %}" class="btn btn-outline-success mb-4">Add
