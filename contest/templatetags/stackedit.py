@@ -11,7 +11,7 @@ register = template.Library()
 @register.filter
 def katex(text):
     def escaper(m):
-        return re.sub(r'([*_^])', r'\\\1', m[0])
+        return re.sub(r'([*_])', r'\\\1', m[0])
 
     return re.sub(r'(\${1,2}).*?\1', escaper, text)
 
@@ -22,7 +22,8 @@ def markdown(text):
     text = markdown2.markdown(text, extras=['code-friendly', 'fenced-code-blocks'])
     text = bleach.clean(text, tags=settings.MARKDOWN_FILTER_WHITELIST_TAGS, attributes={
         'div': ['class'],
-        'span': ['class']
+        'span': ['class'],
+        'img': ['href', 'title']
     })
     text = bleach.linkify(text)
     return text

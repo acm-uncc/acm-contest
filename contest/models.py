@@ -27,6 +27,27 @@ class Problem(models.Model):
         return f'{self.title} ({self.slug})'
 
 
+class Contest(models.Model):
+    title = models.CharField(max_length=255)
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+
+    problems = models.ManyToManyField(Problem)
+
+    @classmethod
+    def active(cls):
+        now = datetime.datetime.now()
+        return cls.objects.filter(start__lt=now, end__gt=now)
+
+    @property
+    def is_active(self):
+        return self.start < datetime.datetime.now() < self.end
+
+    def __str__(self):
+        state = 'active' if self.is_active else 'inactive'
+        return f'{self.title!r} ({state})'
+
+
 class Score(models.Model):
     user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
     points = models.IntegerField(default=0)
