@@ -27,7 +27,7 @@
             <th scope="col">Score</th>
             <th scope="col">Time</th>
 
-            {% for problem in contest.problems.all %}
+            {% for problem in contest.problem_list %}
                 <th scope="col">
                     <a href="{% url 'contest:problem' problem.slug %}"
                        class="text-light">
@@ -48,7 +48,7 @@
                     {{ u.score.minutes }}
                 </td>
 
-                {% for problem in contest.problems.all %}
+                {% for problem in contest.problem_list %}
                     {% if u.score|is_solved:problem %}
                         <td class="align-middle table-success">
                             <i class="fa fa-check text-success"></i><br>
