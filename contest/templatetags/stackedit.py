@@ -23,7 +23,7 @@ def markdown(text):
     text = bleach.clean(text, tags=settings.MARKDOWN_FILTER_WHITELIST_TAGS, attributes={
         'div': ['class'],
         'span': ['class'],
-        'img': ['src', 'title']
+        'img': ['src', 'title', 'class']
     })
     text = bleach.linkify(text)
     return text
