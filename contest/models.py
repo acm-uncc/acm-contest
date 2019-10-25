@@ -86,8 +86,11 @@ class Score(models.Model):
         if not solution:
             return penalty
 
-        today = datetime.datetime.today()
-        start = today.replace(hour=18, minute=0, second=0, microsecond=0)
+        active = Contest.active()
+        if not active:
+            return penalty
+
+        start = active[0].start
 
         minutes = (solution.time - start).seconds // 60
         return minutes + penalty
