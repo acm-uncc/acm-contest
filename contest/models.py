@@ -43,6 +43,10 @@ class Contest(models.Model):
     def is_active(self):
         return self.start < datetime.datetime.now() < self.end
 
+    @property
+    def problem_list(self):
+        return self.problems.order_by('title')
+
     def __str__(self):
         state = 'active' if self.is_active else 'inactive'
         return f'{self.title!r} ({state})'
