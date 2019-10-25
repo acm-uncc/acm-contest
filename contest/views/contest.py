@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import mixins as authmixins
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic.detail import SingleObjectMixin
@@ -32,7 +33,15 @@ class ScoreBoard(generic.TemplateView):
         return ctx
 
 
-class ProblemDetail(generic.DetailView):
+class ContestRequiredMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if not models.Contest.active():
+            return redirect('/')
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+class ProblemDetail(ContestRequiredMixin, generic.DetailView):
     model = models.Problem
     template_name = 'contest/problem.html'
 
@@ -101,7 +110,7 @@ class ProblemDelete(authmixins.PermissionRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy('contest:index')
 
 
-class ProblemDownload(SingleObjectMixin, generic.View):
+class ProblemDownload(ContestRequiredMixin, SingleObjectMixin, generic.View):
     model = models.Problem
 
     def get(self, request, *args, **kwargs):
@@ -109,7 +118,8 @@ class ProblemDownload(SingleObjectMixin, generic.View):
         return HttpResponse(problem.input, content_type='text/plain; charset=utf8')
 
 
-class ProblemSubmit(authmixins.LoginRequiredMixin, generic.FormView):
+class ProblemSubmit(ContestRequiredMixin, authmixins.LoginRequiredMixin,
+                    generic.FormView):
     template_name = 'contest/problem_submit.html'
 
     class SubmissionForm(forms.Form):

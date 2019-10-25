@@ -39,6 +39,14 @@ class Contest(models.Model):
         now = datetime.datetime.now()
         return cls.objects.filter(start__lt=now, end__gt=now)
 
+    @property
+    def is_active(self):
+        return self.start < datetime.datetime.now() < self.end
+
+    def __str__(self):
+        state = 'active' if self.is_active else 'inactive'
+        return f'{self.title!r} ({state})'
+
 
 class Score(models.Model):
     user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.DO_NOTHING)
