@@ -120,7 +120,7 @@ class Submission(models.Model):
 
     @classmethod
     def grade(cls, problem, user, submission):
-        correct = problem.solution == submission
+        correct = normalize(problem.solution) == normalize(submission)
         now = datetime.datetime.now()
 
         return cls(problem=problem, user=user, time=now, correct=correct)
