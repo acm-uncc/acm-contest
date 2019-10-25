@@ -27,7 +27,8 @@ class ScoreBoard(generic.TemplateView):
 
         ctx = super(ScoreBoard, self).get_context_data(**kwargs)
         ctx.update(
-            users=User.objects.order_by('-score__points', 'score__minutes', 'username'),
+            users=User.objects.order_by('-score__points', 'score__minutes',
+                                        'username').filter(score__points__gt=0),
             contests=models.Contest.active()
         )
         return ctx
