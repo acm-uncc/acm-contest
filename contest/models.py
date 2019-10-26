@@ -61,16 +61,22 @@ class Score(models.Model):
     minutes = models.IntegerField(default=0)
 
     @property
+    def deferred_submissions(self):
+        return Submission.objects.defer(
+            'problem__input', 'problem__solution'
+        )
+
+    @property
     def correct_submissions(self):
-        return Submission.objects.filter(user=self.user, correct=True)
+        return self.deferred_submissions.filter(user=self.user, correct=True)
 
     @property
     def solved_problems(self):
         return {sub.problem for sub in self.correct_submissions}
 
     def get_first_solution(self, problem):
-        solved = Submission.objects.filter(user=self.user, problem=problem,
-                                           correct=True).order_by('time')
+        solved = self.deferred_submissions.filter(user=self.user, problem=problem,
+                                                  correct=True).order_by('time')
         if solved:
             return solved[0]
         return None
@@ -82,9 +88,9 @@ class Score(models.Model):
                 'problem__input', 'problem__solution'
             ).filter(user=self.user, problem=problem, correct=False)
         else:
-            attempts = Submission.objects.filter(user=self.user, problem=problem,
-                                                 correct=False,
-                                                 time__lt=first_solution.time)
+            attempts = self.deferred_submissions.filter(user=self.user, problem=problem,
+                                                        correct=False,
+                                                        time__lt=first_solution.time)
         return len(attempts)
 
     def get_time(self, problem):
