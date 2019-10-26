@@ -20,6 +20,9 @@ class Problem(models.Model):
     input = models.TextField(null=True, blank=True)
     solution = models.TextField(null=True, blank=True)
 
+    def get_deferred_fields(self):
+        pass
+
     def get_absolute_url(self):
         return reverse('contest:problem', kwargs=dict(slug=self.slug))
 
@@ -58,16 +61,22 @@ class Score(models.Model):
     minutes = models.IntegerField(default=0)
 
     @property
+    def deferred_submissions(self):
+        return Submission.objects.defer(
+            'problem__input', 'problem__solution'
+        )
+
+    @property
     def correct_submissions(self):
-        return Submission.objects.filter(user=self.user, correct=True)
+        return self.deferred_submissions.filter(user=self.user, correct=True)
 
     @property
     def solved_problems(self):
         return {sub.problem for sub in self.correct_submissions}
 
     def get_first_solution(self, problem):
-        solved = Submission.objects.filter(user=self.user, problem=problem,
-                                           correct=True).order_by('time')
+        solved = self.deferred_submissions.filter(user=self.user, problem=problem,
+                                                  correct=True).order_by('time')
         if solved:
             return solved[0]
         return None
@@ -75,12 +84,13 @@ class Score(models.Model):
     def get_bad_attempts(self, problem):
         first_solution = self.get_first_solution(problem)
         if first_solution is None:
-            attempts = Submission.objects.filter(user=self.user, problem=problem,
-                                                 correct=False)
+            attempts = Submission.objects.defer(
+                'problem__input', 'problem__solution'
+            ).filter(user=self.user, problem=problem, correct=False)
         else:
-            attempts = Submission.objects.filter(user=self.user, problem=problem,
-                                                 correct=False,
-                                                 time__lt=first_solution.time)
+            attempts = self.deferred_submissions.filter(user=self.user, problem=problem,
+                                                        correct=False,
+                                                        time__lt=first_solution.time)
         return len(attempts)
 
     def get_time(self, problem):
