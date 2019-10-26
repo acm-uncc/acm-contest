@@ -26,10 +26,13 @@ class ScoreBoard(generic.TemplateView):
             score.recompute()
 
         ctx = super(ScoreBoard, self).get_context_data(**kwargs)
+
+        contests = models.Contest.started()
+
         ctx.update(
             users=User.objects.order_by('-score__points', 'score__minutes',
                                         'username').filter(score__points__gt=0),
-            contests=models.Contest.active()
+            contests=contests
         )
         return ctx
 
@@ -42,7 +45,7 @@ class ContestRequiredMixin:
         return super().dispatch(request, *args, **kwargs)
 
 
-class ProblemDetail(ContestRequiredMixin, generic.DetailView):
+class ProblemDetail(generic.DetailView):
     model = models.Problem
     template_name = 'contest/problem.html'
 

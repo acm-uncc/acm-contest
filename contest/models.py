@@ -42,6 +42,11 @@ class Contest(models.Model):
         now = datetime.datetime.now()
         return cls.objects.filter(start__lt=now, end__gt=now)
 
+    @classmethod
+    def started(cls):
+        now = datetime.datetime.now()
+        return cls.objects.filter(start__lt=now)
+
     @property
     def is_active(self):
         return self.start < datetime.datetime.now() < self.end
