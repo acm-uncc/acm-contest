@@ -46,6 +46,9 @@ class ProblemDetail(ContestRequiredMixin, generic.DetailView):
     model = models.Problem
     template_name = 'contest/problem.html'
 
+    def get_queryset(self):
+        return self.model.objects.defer('input', 'solution')
+
 
 class ProblemCreate(authmixins.PermissionRequiredMixin, generic.CreateView):
     permission_required = 'contest.add_problem'

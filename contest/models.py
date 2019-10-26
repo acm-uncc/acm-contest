@@ -45,7 +45,7 @@ class Contest(models.Model):
 
     @property
     def problem_list(self):
-        return self.problems.order_by('title')
+        return self.problems.defer('solution', 'input', 'description').order_by('title')
 
     def __str__(self):
         state = 'active' if self.is_active else 'inactive'
