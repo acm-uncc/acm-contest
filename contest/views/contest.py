@@ -45,7 +45,7 @@ class ContestRequiredMixin:
         return super().dispatch(request, *args, **kwargs)
 
 
-class ProblemDetail(ContestRequiredMixin, generic.DetailView):
+class ProblemDetail(generic.DetailView):
     model = models.Problem
     template_name = 'contest/problem.html'
 
