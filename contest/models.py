@@ -107,9 +107,9 @@ class Score(models.Model):
 
         active = Contest.active()
         if not active:
-            return penalty
-
-        start = active[0].start
+            start = Contest.objects.all()[0].start
+        else:
+            start = active[0].start
 
         minutes = (solution.time - start).seconds // 60
         return minutes + penalty
